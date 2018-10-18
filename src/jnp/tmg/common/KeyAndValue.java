@@ -10,6 +10,6 @@ package jnp.tmg.common;
  * @author minht
  */
 public interface KeyAndValue {
-    String getKey();
-    String getValue();
+    public String getKey();
+    public String getValue();
 }

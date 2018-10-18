@@ -15,7 +15,7 @@ import jnp.tmg.modules.assertion.AssertParameter;
  *
  * @author minht
  */
-public class Cookies extends MultiValueEntity<Cookie> implements Iterable<Cookie>{
+public class Cookies extends MultiValueEntity<Cookie>{
    // private final MultiValueEntity<Cookie> cookies;
 
     public Cookies(Cookie... cookies) {

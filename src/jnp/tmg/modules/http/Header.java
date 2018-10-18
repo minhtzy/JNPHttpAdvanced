@@ -1,18 +1,18 @@
 /**
-*
-* Header 
-* Created by @minht on Oct 17, 2018
-*/
-
+ *
+ * Header
+ * Created by @minht on Oct 17, 2018
+ */
 package jnp.tmg.modules.http;
 
 import jnp.tmg.common.KeyAndValue;
+import jnp.tmg.modules.assertion.AssertParameter;
 
+public class Header implements KeyAndValue {
 
-public class Header implements KeyAndValue{
-private String key;
-private String value;
-private String description;
+    private String key;
+    private String value;
+    private String description;
 
     public Header() {
     }
@@ -27,6 +27,7 @@ private String description;
         this.value = value;
         this.description = description;
     }
+
     @Override
     public String getKey() {
         return key;
@@ -52,10 +53,41 @@ private String description;
     public void setDescription(String description) {
         this.description = description;
     }
-        
+
     @Override
     public String toString() {
-        return key + "=" + value;
+        final StringBuilder builder = new StringBuilder();
+        builder.append(key);
+        if (value != null) {
+            builder.append("=").append(value);
+        }
+        return builder.toString();
     }
-    
+
+    public boolean hasSameKeyAs(Header header) {
+        AssertParameter.notNull(header, Header.class);
+        return this.key.equalsIgnoreCase(header.getKey());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Header header = (Header) o;
+
+        // HTTP header names are always case-insensitive. Values are usually case-insensitive.
+        if (key != null ? !key.equalsIgnoreCase(header.key) : header.key != null) {
+            return false;
+        }
+        if (value != null ? !value.equalsIgnoreCase(header.value) : header.value != null) {
+            return false;
+        }
+
+        return true;
+    }
 }
