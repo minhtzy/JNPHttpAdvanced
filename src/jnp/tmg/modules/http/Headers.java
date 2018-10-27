@@ -15,6 +15,9 @@ import jnp.tmg.common.MultiValueEntity;
  */
 public class Headers extends MultiValueEntity<Header>{
     
+    public Headers() {
+        super();
+    }
     public Headers(List<Header> entities) {
         super(entities);
     }

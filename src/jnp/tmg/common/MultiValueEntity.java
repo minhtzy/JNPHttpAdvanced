@@ -24,12 +24,19 @@ public class MultiValueEntity<T extends KeyAndValue> implements Iterable<T> {
         return entities.iterator();
     }
 
+    public MultiValueEntity() {
+        entities = new LinkedList<>();
+    }
+
     public MultiValueEntity(List<T> entities) {
         AssertParameter.notNull(entities, "entities");
         this.entities = entities;
 
     }
 
+    public void addEntity(T entity) {
+        this.entities.add(entity);
+    }
     public int size() {
         return entities.size();
     }
@@ -79,9 +86,9 @@ public class MultiValueEntity<T extends KeyAndValue> implements Iterable<T> {
     public List<String> getValues(String key) {
         List<T> list = getEntities(key);
         final List<String> stringList = new LinkedList<>();
-        for (T entity : entities) {
+        entities.forEach((entity) -> {
             stringList.add(entity.getValue());
-        }
+        });
         return stringList;
     }
         @Override
@@ -90,9 +97,9 @@ public class MultiValueEntity<T extends KeyAndValue> implements Iterable<T> {
             return "";
         }
         final StringBuilder builder = new StringBuilder();
-        for (T entity : entities) {
+        entities.forEach((entity) -> {
             builder.append(entity).append("\r\n"); // CRLF
-        }
+        });
         builder.deleteCharAt(builder.length()-1);
         return builder.toString();
     }
