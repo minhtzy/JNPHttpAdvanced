@@ -37,7 +37,7 @@ public class BodyBuilder {
     }
     public String build() {
         String strBody = "";
-        if(contentType.equals(this) )
+        //if(contentType.equals(this) ) ;
         return strBody;
     }
 }

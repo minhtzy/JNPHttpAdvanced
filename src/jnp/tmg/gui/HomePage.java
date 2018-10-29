@@ -5,7 +5,13 @@
  */
 package jnp.tmg.gui;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import jnp.tmg.client.HttpRequester;
 
 /**
  *
@@ -48,6 +54,7 @@ public class HomePage extends javax.swing.JFrame {
         AddRowBodyButton = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        lblResponseStatus = new javax.swing.JLabel();
         jTabbedPane3 = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -62,7 +69,7 @@ public class HomePage extends javax.swing.JFrame {
         jMenu1.setText("jMenu1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(768, 420));
+        setPreferredSize(new java.awt.Dimension(768, 620));
 
         method_combobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS" }));
 
@@ -222,7 +229,7 @@ public class HomePage extends javax.swing.JFrame {
 
         jLabel1.setText("Response");
 
-        jLabel2.setText("Status");
+        jLabel2.setText("Status:");
 
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
@@ -289,12 +296,8 @@ public class HomePage extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(method_combobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(url_string, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -302,8 +305,15 @@ public class HomePage extends javax.swing.JFrame {
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(SubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTabbedPane3)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 698, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jTabbedPane3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 698, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblResponseStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(64, 64, 64))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -319,11 +329,14 @@ public class HomePage extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblResponseStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
+
+        lblResponseStatus.getAccessibleContext().setAccessibleName("lblResponseStatus");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -345,16 +358,32 @@ public class HomePage extends javax.swing.JFrame {
         System.out.println(url + method);
 //         String[] key = new String[10];
 //         String[] value = new String[10];
-        BodyResponse.setText("");
-        BodyResponse.append(url);
-        BodyResponse.append("\n");
-        BodyResponse.append(method);
-        System.out.println(BodyTable.getModel().getValueAt(0, 0));
-        for (int x = 0; x < 5; x++) {
-            if (BodyTable.getModel().getValueAt(x, 0) != null && BodyTable.getModel().getValueAt(x, 1) != null) {
-                BodyResponse.append(BodyTable.getModel().getValueAt(x, 0).toString() + " : " + BodyTable.getModel().getValueAt(x, 1).toString());
+
+        HttpRequester requester = null;
+
+        if ("GET".equals(method)) {
+            try {
+                requester = new HttpRequester(new URI(url));
+                requester.sendGet();
+                BodyResponse.setText("");
+                BodyResponse.append(url);
+                BodyResponse.append("\n");
+                BodyResponse.append(method);
+                lblResponseStatus.setText(requester.getStatusCode() + " - " + requester.getStatusMessage());
+                BodyResponse.append("\n");
+                BodyResponse.append(requester.getResponseBody());
+
+            } catch (Exception ex) {
+                Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+
+        //System.out.println(BodyTable.getModel().getValueAt(0, 0));
+//        for (int x = 0; x < 5; x++) {
+//            if (BodyTable.getModel().getValueAt(x, 0) != null && BodyTable.getModel().getValueAt(x, 1) != null) {
+//                BodyResponse.append(BodyTable.getModel().getValueAt(x, 0).toString() + " : " + BodyTable.getModel().getValueAt(x, 1).toString());
+//            }
+//        }
 //         for(int x = 0; x <5; x++){
 //         BodyResponse.append(key[x] + " : " + value[x]);
 //         }
@@ -444,6 +473,7 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextArea jTextArea3;
+    private javax.swing.JLabel lblResponseStatus;
     private javax.swing.JComboBox<String> method_combobox;
     private javax.swing.JTextField url_string;
     // End of variables declaration//GEN-END:variables

@@ -5,7 +5,6 @@
  */
 package jnp.tmg.client;
 
-import com.sun.org.glassfish.gmbal.ParameterNames;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +27,8 @@ import jnp.tmg.utils.IOUtils;
 public class HttpRequester {
 
     private URI uri;
+    int statusCode;
+    String statusMessage;
     private Headers requestHeaders;
     private Headers responeHeaders;
     private String requestBody;
@@ -53,6 +54,15 @@ public class HttpRequester {
         this.requestBody = requestBody;
     }
 
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public String getStatusMessage() {
+        return statusMessage;
+    }
+
+ 
     public URI getUrl() {
         return uri;
     }
@@ -173,6 +183,8 @@ public class HttpRequester {
     private void getContent(HttpURLConnection con) throws IOException {
         System.out.println("Get Content");
         if (con != null) {
+            statusCode = con.getResponseCode();
+            statusMessage = con.getResponseMessage();
             int responeCode = con.getResponseCode();
             System.out.println("Status: " + responeCode + " " + con.getResponseMessage());
 
