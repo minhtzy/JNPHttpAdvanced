@@ -114,7 +114,7 @@ public class HttpRequester {
         getContent(con);
     }
     
-    @SuppressWarnings("unchecked")
+   
     public void sendHead() throws MalformedURLException, IOException {
         AssertParameter.notNull(uri, "uri");
         
@@ -130,7 +130,6 @@ public class HttpRequester {
     }
 
     
-    @SuppressWarnings("unchecked")
     public void sendDelete() throws MalformedURLException, IOException {
         AssertParameter.notNull(uri, "uri");
 
@@ -151,7 +150,7 @@ public class HttpRequester {
         getContent(con);
     }
     
-    @SuppressWarnings("unchecked")
+    
     public void sendPut() throws MalformedURLException, ProtocolException, IOException {
         AssertParameter.notNull(uri, "uri");
 
