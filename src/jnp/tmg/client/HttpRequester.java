@@ -195,11 +195,10 @@ public class HttpRequester {
             headers.entrySet().forEach((entry) -> {
                 String key = entry.getKey();
                 List<String> value = entry.getValue();
-                Header header = new Header(key, value.toString());
+                Header header = new Header(key, value);
                 listHeaders.add(header);
-
                 System.out.println();
-                System.out.println(key + " = " + value.toString());
+                System.out.println(header.getKey() + " = " + header.getValue());
             });
 
             try (InputStream input = con.getInputStream()) {

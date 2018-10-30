@@ -6,24 +6,28 @@
 
 package jnp.tmg.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import jnp.tmg.modules.assertion.AssertParameter;
 import jnp.tmg.modules.http.ContentType;
+import jnp.tmg.modules.http.Header;
 import jnp.tmg.modules.http.Headers;
 
 
 public class BodyBuilder {
-    private ContentType contentType;
+    private String contentType;
+    //private String charSet;
     private Headers keysAndValues;
     private String textContent;
     public BodyBuilder() {
         
     }
-    public BodyBuilder setContentType(ContentType contentType) {
+    public BodyBuilder setContentType(String contentType) {
         try {
             AssertParameter.notNull(contentType, "Content-Type");
             this.contentType = contentType;
         } catch (Exception e) {
-            this.contentType = ContentType.ANY;
+            this.contentType = ContentType.ANY.toString();
         }
         return this;
     } 
@@ -35,9 +39,21 @@ public class BodyBuilder {
         this.textContent = textContent;
         return this;
     }
-    public String build() {
-        String strBody = "";
-        //if(contentType.equals(this) ) ;
-        return strBody;
+    public String build() throws UnsupportedEncodingException {
+        ContentType foundContentType = ContentType.fromContentType(contentType);
+        if( foundContentType == ContentType.ANY || foundContentType == ContentType.URLENC ) {
+            StringBuilder bodyBuilder = new StringBuilder();
+            //if(contentType.equals(this) ) ;
+            for(Header h : keysAndValues) {
+                bodyBuilder.append(h.getKey());
+                bodyBuilder.append("=");
+                bodyBuilder.append(h.getValue());
+                bodyBuilder.append("&");
+            }
+            return URLEncoder.encode(bodyBuilder.toString(),"UTF-8");
+        }
+        else {
+            return "";    
+        }   
     }
 }

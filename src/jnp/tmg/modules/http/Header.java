@@ -5,6 +5,7 @@
  */
 package jnp.tmg.modules.http;
 
+import java.util.List;
 import jnp.tmg.common.KeyAndValue;
 import jnp.tmg.modules.assertion.AssertParameter;
 
@@ -21,7 +22,11 @@ public class Header implements KeyAndValue {
         this.key = key;
         this.value = value;
     }
-
+    
+    public Header(String key,List<String> values) {
+        this.key = key;
+        this.value = String.join(", ", values);
+    }
     public Header(String key, String value, String description) {
         this.key = key;
         this.value = value;
