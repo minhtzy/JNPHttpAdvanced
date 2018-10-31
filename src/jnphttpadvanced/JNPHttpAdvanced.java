@@ -5,6 +5,8 @@
  */
 package jnphttpadvanced;
 
+import jnp.tmg.gui.HomePage;
+
 /**
  *
  * @author minht
@@ -16,6 +18,11 @@ public class JNPHttpAdvanced {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new HomePage().setVisible(true);
+            }
+        });
     }
-    
+
 }

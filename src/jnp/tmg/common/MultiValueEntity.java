@@ -58,7 +58,7 @@ public class MultiValueEntity<T extends KeyAndValue> implements Iterable<T> {
     public T getEntity(String key) {
         AssertParameter.notNull(key, "Key");
         for (T entity : entities) {
-            if (entity.getKey().equalsIgnoreCase(key)) {
+            if (entity != null && entity.getKey().equalsIgnoreCase(key)) {
                 return entity;
             }
         }

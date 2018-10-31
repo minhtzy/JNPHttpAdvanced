@@ -18,6 +18,8 @@ import jnp.tmg.modules.http.ContentType;
 import jnp.tmg.modules.http.Header;
 import jnp.tmg.modules.http.Headers;
 import jnp.tmg.utils.BodyBuilder;
+import jnp.tmg.utils.JsonUtils;
+import jnp.tmg.utils.XMLUtils;
 
 /**
  *
@@ -68,6 +70,7 @@ public class HomePage extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         BodyResponse = new javax.swing.JTextArea();
+        ResponeContentType = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         CookieResponse = new javax.swing.JTextArea();
@@ -75,7 +78,7 @@ public class HomePage extends javax.swing.JFrame {
         jMenu1.setText("jMenu1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(768, 620));
+        setPreferredSize(new java.awt.Dimension(738, 720));
 
         method_combobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS" }));
 
@@ -261,19 +264,37 @@ public class HomePage extends javax.swing.JFrame {
         BodyResponse.setRows(5);
         jScrollPane4.setViewportView(BodyResponse);
 
+        ResponeContentType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "XML", "HTML", "JSON", "Text", "RAW" }));
+        ResponeContentType.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                ResponeContentTypeItemStateChanged(evt);
+            }
+        });
+        ResponeContentType.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                ResponeContentTypePropertyChange(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 683, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 28, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 689, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 131, Short.MAX_VALUE))
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(ResponeContentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ResponeContentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jTabbedPane3.addTab("Body", jPanel6);
@@ -287,8 +308,8 @@ public class HomePage extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 682, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 125, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -309,8 +330,8 @@ public class HomePage extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(url_string, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(SubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jTabbedPane3, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 698, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -318,9 +339,9 @@ public class HomePage extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblResponseStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(64, 64, 64))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblResponseStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(137, 137, 137))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -333,9 +354,9 @@ public class HomePage extends javax.swing.JFrame {
                     .addComponent(SubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblResponseStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblResponseStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -359,7 +380,7 @@ public class HomePage extends javax.swing.JFrame {
 
     private void SubmitButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SubmitButtonMouseClicked
         // TODO add your handling code here:
-        
+
         resetRespones();
         String url = url_string.getText();
         String method = method_combobox.getSelectedItem().toString();
@@ -379,21 +400,44 @@ public class HomePage extends javax.swing.JFrame {
             } else if ("POST".equals(method)) {
                 requester.sendPost();
             }
-            BodyResponse.setText("");
+//            BodyResponse.setText("");
 //            BodyResponse.append(url);
 //            BodyResponse.append("\n");
 //            BodyResponse.append(method);
 //          BodyResponse.append("\n");
+
             lblResponseStatus.setText(requester.getStatusCode() + " - " + requester.getStatusMessage());
-            BodyResponse.append(requester.getResponseBody());
+            bodyResponse = requester.getResponseBody();
+            //BodyResponse.append(bodyResponse);
             HeaderResponse.setText(requester.getResponeHeaders().toString());
+
+            if (requester.getResponeHeaders().hasEntity("Content-Type")) {
+                String ct = requester.getResponeHeaders().getValue("Content-Type");
+                switch (ContentType.fromContentType(ct)) {
+                    case HTML:
+                        ResponeContentType.setSelectedItem("HTML");
+                        break;
+                    case XML:
+                        ResponeContentType.setSelectedItem("XML");
+                        break;
+                    case JSON:
+                        ResponeContentType.setSelectedItem("JSON");
+                        break;
+                    case TEXT:
+                        ResponeContentType.setSelectedItem("Text");
+                        break;
+                    default:
+                        ResponeContentType.setSelectedItem("RAW");
+                }
+            }
+
         } catch (IOException ex) {
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
-            
+
         } catch (URISyntaxException ex) {
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "URL syntax not correct!");
-        } 
+        }
 
         //System.out.println(BodyTable.getModel().getValueAt(0, 0));
 //        for (int x = 0; x < 5; x++) {
@@ -427,40 +471,42 @@ public class HomePage extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_AddRowHeaderButtonActionPerformed
 
-    protected Headers getRequestHeaders() {
-        Headers requestHeaders = new Headers();
-        requestHeaders.addEntity(new Header("Content-Type", ContentType.URLENC.toString()));
-        for (int i = 0; i < HeaderTable.getRowCount(); ++i) {
-            if (HeaderTable.getValueAt(i, 0) != null && HeaderTable.getValueAt(i, 1) != null) {
-                String key = HeaderTable.getValueAt(i, 0).toString();
-                String value = HeaderTable.getValueAt(i, 1).toString();
-                requestHeaders.addEntity(new Header(key, value));
-            }
-        }
-        return requestHeaders;
-    }
+    private void ResponeContentTypePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_ResponeContentTypePropertyChange
+        // TODO add your handling code here:
 
-    public String getRequestBody() {
-        Headers bodyKeysValues = new Headers();
-        for (int i = 0; i < BodyTable.getRowCount(); ++i) {
-            if (BodyTable.getValueAt(i, 0) != null && BodyTable.getValueAt(i, 1) != null) {
-                String key = BodyTable.getValueAt(i, 0).toString();
-                String value = BodyTable.getValueAt(i, 1).toString();
-                bodyKeysValues.addEntity(new Header(key, value));
+
+    }//GEN-LAST:event_ResponeContentTypePropertyChange
+
+    private void ResponeContentTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ResponeContentTypeItemStateChanged
+        // TODO add your handling code here:
+        String contentType = ResponeContentType.getSelectedItem().toString();
+        if (null == contentType) {
+            ResponeContentType.setSelectedItem("RAW");
+            //BodyResponse.setText(bodyResponse);
+
+        } else {
+            String parseData = "";
+            switch (contentType) {
+                case "XML":
+                case "HTML": {
+                    parseData = XMLUtils.format(parseData); //XMLUtils.prettyXML(bodyResponse);
+                }
+                break;
+                case "JSON": {
+                    parseData = JsonUtils.prettyJson(bodyResponse);
+                }
+                break;
+                case "Text":
+                case "RAW":
+                default:
+                    parseData = bodyResponse;
+                    break;
             }
+            BodyResponse.setText("");
+            BodyResponse.append(parseData);
         }
 
-        String body = "";
-        try {
-            body = new BodyBuilder()
-                    .setContentType(ContentType.URLENC.toString())
-                    .setKeysAndValues(bodyKeysValues)
-                    .build();
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return body;
-    }
+    }//GEN-LAST:event_ResponeContentTypeItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -505,6 +551,7 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JTextArea CookieResponse;
     private javax.swing.JTextArea HeaderResponse;
     private javax.swing.JTable HeaderTable;
+    private javax.swing.JComboBox<String> ResponeContentType;
     private javax.swing.JButton SubmitButton;
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox2;
@@ -530,10 +577,49 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JTextField url_string;
     // End of variables declaration//GEN-END:variables
 
-    private void resetRespones() {
+    // 
+    protected String bodyResponse = "";
+
+    protected void resetRespones() {
         lblResponseStatus.setText("");
         BodyResponse.setText("");
         HeaderResponse.setText("");
         CookieResponse.setText("");
+        bodyResponse = "";
+    }
+
+    protected Headers getRequestHeaders() {
+        Headers requestHeaders = new Headers();
+        requestHeaders.addEntity(new Header("Content-Type", ContentType.URLENC.toString()));
+        for (int i = 0; i < HeaderTable.getRowCount(); ++i) {
+            if (HeaderTable.getValueAt(i, 0) != null && HeaderTable.getValueAt(i, 1) != null) {
+                String key = HeaderTable.getValueAt(i, 0).toString();
+                String value = HeaderTable.getValueAt(i, 1).toString();
+                requestHeaders.addEntity(new Header(key, value));
+            }
+        }
+        return requestHeaders;
+    }
+
+    public String getRequestBody() {
+        Headers bodyKeysValues = new Headers();
+        for (int i = 0; i < BodyTable.getRowCount(); ++i) {
+            if (BodyTable.getValueAt(i, 0) != null && BodyTable.getValueAt(i, 1) != null) {
+                String key = BodyTable.getValueAt(i, 0).toString();
+                String value = BodyTable.getValueAt(i, 1).toString();
+                bodyKeysValues.addEntity(new Header(key, value));
+            }
+        }
+
+        String body = "";
+        try {
+            body = new BodyBuilder()
+                    .setContentType(ContentType.URLENC.toString())
+                    .setKeysAndValues(bodyKeysValues)
+                    .build();
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return body;
     }
 }

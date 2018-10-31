@@ -201,9 +201,9 @@ public class HttpRequester {
                 System.out.println(header.getKey() + " = " + header.getValue());
             });
 
+            responeHeaders = new Headers(listHeaders);
             try (InputStream input = con.getInputStream()) {
                 if (input != null) {
-                    responeHeaders = new Headers(listHeaders);
                     System.out.println("Body");
                     responeBodyBytes = IOUtils.toByteArray(input);
                     responeBody = new String(responeBodyBytes);
