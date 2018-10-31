@@ -62,9 +62,8 @@ public class Header implements KeyAndValue {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append(key);
-        if (value != null) {
-            builder.append("=").append(value);
+        if (key != null && value != null) {
+            builder.append(key).append("=").append(value);
         }
         return builder.toString();
     }

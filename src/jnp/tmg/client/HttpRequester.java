@@ -62,7 +62,6 @@ public class HttpRequester {
         return statusMessage;
     }
 
- 
     public URI getUrl() {
         return uri;
     }
@@ -123,11 +122,10 @@ public class HttpRequester {
         }
         getContent(con);
     }
-    
-   
+
     public void sendHead() throws MalformedURLException, IOException {
         AssertParameter.notNull(uri, "uri");
-        
+
         URL url = uri.toURL();
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
@@ -139,7 +137,6 @@ public class HttpRequester {
         getContent(con);
     }
 
-    
     public void sendDelete() throws MalformedURLException, IOException {
         AssertParameter.notNull(uri, "uri");
 
@@ -156,11 +153,10 @@ public class HttpRequester {
             out.write(IOUtils.toByteArray((String) requestBody, Charset.forName("UTF-8")));
             out.flush();
         }
-        
+
         getContent(con);
     }
-    
-    
+
     public void sendPut() throws MalformedURLException, ProtocolException, IOException {
         AssertParameter.notNull(uri, "uri");
 
@@ -192,13 +188,17 @@ public class HttpRequester {
             Map<String, List<String>> headers = con.getHeaderFields();
 
             List<Header> listHeaders = new LinkedList<>();
+            System.out.println(headers);
             headers.entrySet().forEach((entry) -> {
+
                 String key = entry.getKey();
                 List<String> value = entry.getValue();
-                Header header = new Header(key, value);
-                listHeaders.add(header);
-                System.out.println();
-                System.out.println(header.getKey() + " = " + header.getValue());
+                if (key != null && value != null) {
+                    Header header = new Header(key, value);
+                    listHeaders.add(header);
+                }
+//                System.out.println(key + "=" + value);
+//                System.out.println(header);
             });
 
             responeHeaders = new Headers(listHeaders);
@@ -207,7 +207,7 @@ public class HttpRequester {
                     System.out.println("Body");
                     responeBodyBytes = IOUtils.toByteArray(input);
                     responeBody = new String(responeBodyBytes);
-                    System.out.println(responeBody);
+//                    System.out.println(responeBody);
                 }
 
             }

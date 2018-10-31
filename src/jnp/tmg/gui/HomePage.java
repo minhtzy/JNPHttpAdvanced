@@ -400,7 +400,7 @@ public class HomePage extends javax.swing.JFrame {
             } else if ("POST".equals(method)) {
                 requester.sendPost();
             }
-//            BodyResponse.setText("");
+            BodyResponse.setText("");
 //            BodyResponse.append(url);
 //            BodyResponse.append("\n");
 //            BodyResponse.append(method);
@@ -408,7 +408,7 @@ public class HomePage extends javax.swing.JFrame {
 
             lblResponseStatus.setText(requester.getStatusCode() + " - " + requester.getStatusMessage());
             bodyResponse = requester.getResponseBody();
-            //BodyResponse.append(bodyResponse);
+            BodyResponse.append(bodyResponse);
             HeaderResponse.setText(requester.getResponeHeaders().toString());
 
             if (requester.getResponeHeaders().hasEntity("Content-Type")) {
