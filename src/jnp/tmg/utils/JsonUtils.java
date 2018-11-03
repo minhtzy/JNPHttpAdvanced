@@ -23,6 +23,20 @@ public class JsonUtils {
         return new JSONObject(strData);
     }
 
+    public static JSONObject parseJsonFromXML(String xml) throws JSONException {
+        JSONObject jsonObject = XML.toJSONObject(xml);
+        return jsonObject;
+    }
+    
+    public static String prettyJson(JSONObject jsonObject) {
+        try {
+            String prettyString = jsonObject.toString(PRERTTY_STRING_INDENT_FACTOR);
+            return prettyString;
+        } catch (JSONException ex) {
+            Logger.getLogger(JsonUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return jsonObject.toString();
+    }
     public static String prettyJson(String rawData) {
         try {
             JSONObject json = new JSONObject(rawData);

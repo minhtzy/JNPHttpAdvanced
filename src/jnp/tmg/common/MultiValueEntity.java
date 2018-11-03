@@ -58,7 +58,7 @@ public class MultiValueEntity<T extends KeyAndValue> implements Iterable<T> {
     public T getEntity(String key) {
         AssertParameter.notNull(key, "Key");
         for (T entity : entities) {    
-            System.out.println(entity + "------------------" + entity.getKey());
+            //System.out.println(entity + "------------------" + entity.getKey());
             if (entity != null && entity.getKey().equalsIgnoreCase(key)) {
                 return entity;
             }
@@ -87,7 +87,7 @@ public class MultiValueEntity<T extends KeyAndValue> implements Iterable<T> {
     public List<String> getValues(String key) {
         List<T> list = getEntities(key);
         final List<String> stringList = new LinkedList<>();
-        entities.forEach((entity) -> {
+        list.forEach((entity) -> {
             stringList.add(entity.getValue());
         });
         return stringList;

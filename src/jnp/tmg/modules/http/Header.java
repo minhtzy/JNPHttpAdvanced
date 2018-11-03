@@ -63,7 +63,7 @@ public class Header implements KeyAndValue {
     public String toString() {
         final StringBuilder builder = new StringBuilder();
         if (key != null && value != null) {
-            builder.append(key).append("=").append(value);
+            builder.append(key).append(" \u2192 ").append(value);
         }
         return builder.toString();
     }

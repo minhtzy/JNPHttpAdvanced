@@ -22,14 +22,15 @@
             <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/modules/http/Header.java</file>
             <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/config/ClientConfig.java</file>
             <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/utils/RequestLogger.java</file>
-            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/gui/HomePage.java</file>
             <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/config/UserConfig.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/gui/HomePage.java</file>
             <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/modules/http/Cookies.java</file>
             <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/utils/XMLUtils.java</file>
             <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/modules/http/Headers.java</file>
             <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/modules/http/Cookie.java</file>
             <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/utils/IOUtils.java</file>
             <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/modules/assertion/AssertParameter.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/utils/CookieHelper.java</file>
         </group>
     </open-files>
 </project-private>

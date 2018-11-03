@@ -22,6 +22,9 @@ import jnp.tmg.modules.assertion.AssertParameter;
 import jnp.tmg.modules.http.Header;
 import jnp.tmg.modules.http.Headers;
 import jnp.tmg.config.ClientConfig;
+import jnp.tmg.modules.http.Cookie;
+import jnp.tmg.modules.http.Cookies;
+import jnp.tmg.utils.CookieHelper;
 import jnp.tmg.utils.IOUtils;
 
 public class HttpRequester {
@@ -104,7 +107,7 @@ public class HttpRequester {
         getContent(con);
     }
 
-    public void sendPost() throws IOException {
+    public void sendPost() throws MalformedURLException, IOException {
         AssertParameter.notNull(uri, "uri");
 
         URL url = uri.toURL();
@@ -176,15 +179,31 @@ public class HttpRequester {
         getContent(con);
     }
 
+    public Cookies getCookies() {
+        List<String> strCookies = responeHeaders.getValues("Set-Cookie");
+
+        List<Cookie> listCookie = new LinkedList<>();
+        for (String sc : strCookies) {
+            try {
+                Cookie cookie = CookieHelper.parseRawCookie(sc);
+                listCookie.add(cookie);
+            } catch (Exception ex) {
+                System.err.println(ex.getMessage());
+            }
+        }
+
+        return new Cookies(listCookie);
+    }
+
     private void getContent(HttpURLConnection con) throws IOException {
-        System.out.println("Get Content");
+        System.out.println("Get Content....");
         if (con != null) {
             statusCode = con.getResponseCode();
             statusMessage = con.getResponseMessage();
             int responeCode = con.getResponseCode();
             System.out.println("Status: " + responeCode + " " + con.getResponseMessage());
 
-            System.out.println("Headers : ");
+            System.out.println("Get Headers...");
             Map<String, List<String>> headers = con.getHeaderFields();
 
             List<Header> listHeaders = new LinkedList<>();
@@ -194,22 +213,25 @@ public class HttpRequester {
                 String key = entry.getKey();
                 List<String> value = entry.getValue();
                 if (key != null && value != null) {
-                    Header header = new Header(key, value);
-                    listHeaders.add(header);
+                    for (String vString : value) {
+                        Header header = new Header(key, vString);
+                        listHeaders.add(header);
+                    }
+
                 }
 //                System.out.println(key + "=" + value);
 //                System.out.println(header);
             });
 
+            System.out.println("Get Header Completed");
             responeHeaders = new Headers(listHeaders);
             try (InputStream input = con.getInputStream()) {
                 if (input != null) {
-                    System.out.println("Body");
+                    System.out.println("Get Body...");
                     responeBodyBytes = IOUtils.toByteArray(input);
                     responeBody = new String(responeBodyBytes);
-//                    System.out.println(responeBody);
+                    System.out.println("Get Body Completed");
                 }
-
             }
         }
     }
