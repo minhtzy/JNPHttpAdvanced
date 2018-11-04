@@ -42,7 +42,7 @@
                           <Component id="jTabbedPane1" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Component id="jLabel1" min="-2" pref="123" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="382" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="484" max="-2" attributes="0"/>
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="lblResponseStatus" min="-2" pref="286" max="-2" attributes="0"/>
@@ -80,7 +80,7 @@
                   <Component id="SubmitButton" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jTabbedPane1" min="-2" pref="190" max="-2" attributes="0"/>
+              <Component id="jTabbedPane1" min="-2" pref="255" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="lblResponseStatus" alignment="0" min="-2" pref="35" max="-2" attributes="0"/>
@@ -89,8 +89,8 @@
                       <Component id="jLabel2" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jTabbedPane3" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="jTabbedPane3" min="-2" pref="430" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -160,7 +160,7 @@
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="98" max="-2" attributes="0"/>
                       <Component id="jComboBox2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="723" max="32767" attributes="0"/>
+                      <EmptySpace pref="728" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -172,7 +172,7 @@
                           <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jComboBox2" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="110" max="32767" attributes="0"/>
+                      <EmptySpace pref="187" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -217,7 +217,7 @@
                       <Component id="jScrollPane5" min="-2" pref="840" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="AddRowHeaderButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="21" max="32767" attributes="0"/>
+                      <EmptySpace pref="26" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -226,7 +226,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                       <Component id="AddRowHeaderButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="109" max="32767" attributes="0"/>
+                      <EmptySpace pref="174" max="32767" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane5" alignment="0" pref="0" max="32767" attributes="0"/>
               </Group>
@@ -306,7 +306,7 @@
                       <Component id="jScrollPane6" min="-2" pref="840" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="AddRowBodyButton" min="-2" pref="40" max="-2" attributes="0"/>
-                      <EmptySpace pref="22" max="32767" attributes="0"/>
+                      <EmptySpace pref="27" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -315,7 +315,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                       <Component id="AddRowBodyButton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="108" max="32767" attributes="0"/>
+                      <EmptySpace pref="173" max="32767" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane6" alignment="0" pref="0" max="32767" attributes="0"/>
               </Group>
@@ -422,7 +422,7 @@
             </DimensionLayout>
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane3" alignment="1" pref="459" max="32767" attributes="0"/>
+                  <Component id="jScrollPane3" alignment="1" pref="402" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -457,7 +457,10 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="ResponeContentType" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="btnPreviewHtml" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
@@ -469,9 +472,13 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <Component id="ResponeContentType" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="ResponeContentType" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnPreviewHtml" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane4" pref="433" max="32767" attributes="0"/>
+                      <Component id="jScrollPane4" min="-2" pref="361" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -510,6 +517,15 @@
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnPreviewHtml">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Preview"/>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPreviewHtmlActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
