@@ -605,7 +605,7 @@ public class HomePage extends javax.swing.JFrame {
 
     private void ResponeContentTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ResponeContentTypeItemStateChanged
         // TODO add your handling code here:
-        
+
         String bodyResponse = requester.getResponseBody();
         String contentType = ResponeContentType.getSelectedItem().toString();
         if (null == contentType) {
@@ -834,6 +834,14 @@ public class HomePage extends javax.swing.JFrame {
         frame.add(browswerView, BorderLayout.CENTER);
         frame.setSize(700, 500);
         frame.setVisible(true);
-        browser.loadHTML(bodyResponse);
+        String method = method_combobox.getSelectedItem().toString();
+        if (method == "GET") {
+            String url = url_string.getText();
+            browser.loadURL(url);
+        } else {
+            browser.loadHTML(bodyResponse);
+        }
+
+        selectBrowser sB = new selectBrowser(browser);
     }
 }
