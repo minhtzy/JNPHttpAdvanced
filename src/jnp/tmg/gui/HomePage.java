@@ -5,19 +5,19 @@
  */
 package jnp.tmg.gui;
 
-import com.teamdev.jxbrowser.chromium.Browser;
-import com.teamdev.jxbrowser.chromium.swing.BrowserView;
-import java.awt.BorderLayout;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.CookieManager;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
+import jnp.tmg.client.CookiesManager;
 import jnp.tmg.client.HttpRequester;
 import jnp.tmg.modules.http.ContentType;
 import jnp.tmg.modules.http.Cookie;
@@ -38,7 +38,7 @@ public class HomePage extends javax.swing.JFrame {
      */
     public HomePage() {
         initComponents();
-        loadDefaultConfig();
+        myInitHomePage();
     }
 
     /**
@@ -56,11 +56,8 @@ public class HomePage extends javax.swing.JFrame {
         method_combobox = new javax.swing.JComboBox<>();
         url_string = new javax.swing.JTextField();
         SubmitButton = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnParams = new javax.swing.JButton();
         RequestPane = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         HeaderTable = new javax.swing.JTable();
@@ -68,25 +65,28 @@ public class HomePage extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         radioUrlencoded = new javax.swing.JRadioButton();
         radioRaw = new javax.swing.JRadioButton();
-        requestContentType = new javax.swing.JComboBox<>();
-        urlencodePane = new javax.swing.JLayeredPane();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        cbRequestContentType = new javax.swing.JComboBox<>();
         rawPane = new javax.swing.JLayeredPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtBodyRequest = new javax.swing.JTextArea();
+        urlencodedPane = new javax.swing.JLayeredPane();
         jScrollPane6 = new javax.swing.JScrollPane();
         BodyTable = new javax.swing.JTable();
         AddRowBodyButton = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         lblResponseStatus = new javax.swing.JLabel();
         ResponsePane = new javax.swing.JTabbedPane();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        HeaderResponse = new javax.swing.JTextArea();
+        txtHeaderResponse = new javax.swing.JTextArea();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        BodyResponse = new javax.swing.JTextArea();
-        ResponeContentType = new javax.swing.JComboBox<>();
+        txtBodyResponse = new javax.swing.JTextArea();
+        cbResponeContentType = new javax.swing.JComboBox<>();
         btnPreviewHtml = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -109,6 +109,9 @@ public class HomePage extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 SubmitButtonMouseClicked(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                SubmitButtonMousePressed(evt);
+            }
         });
         SubmitButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,36 +119,9 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Params");
+        btnParams.setText("Params");
 
         RequestPane.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        jLabel3.setText("Type");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No Auth", "Basic Auth", "OAuth 1.0", "OAuth 2.0" }));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3)
-                .addGap(98, 98, 98)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(728, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(239, Short.MAX_VALUE))
-        );
-
-        RequestPane.addTab("Authorization", jPanel1);
 
         HeaderTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -207,45 +183,38 @@ public class HomePage extends javax.swing.JFrame {
         RequestPane.addTab("Header", jPanel2);
 
         buttonGroup1.add(radioUrlencoded);
-        radioUrlencoded.setSelected(true);
         radioUrlencoded.setText("x-www-form-urlencoded");
 
         buttonGroup1.add(radioRaw);
         radioRaw.setText("raw");
 
-        requestContentType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "JSON(application/json)", "XML(text/xml)", "XML(application/xml)", "HTML(text/html)", "JAVASCRIPT(application/javascript)", "TEXT(text/plain)" }));
+        cbRequestContentType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "application/json", "text/xml", "application/xml", "text/html", "application/javascript", "text/plain" }));
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, radioRaw, org.jdesktop.beansbinding.ELProperty.create("${selected}"), requestContentType, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, radioRaw, org.jdesktop.beansbinding.ELProperty.create("${selected}"), cbRequestContentType, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, radioUrlencoded, org.jdesktop.beansbinding.ELProperty.create("${selected}"), urlencodePane, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
+        txtBodyRequest.setColumns(20);
+        txtBodyRequest.setRows(5);
+        jScrollPane2.setViewportView(txtBodyRequest);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        rawPane.setLayer(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        urlencodePane.setLayer(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        javax.swing.GroupLayout urlencodePaneLayout = new javax.swing.GroupLayout(urlencodePane);
-        urlencodePane.setLayout(urlencodePaneLayout);
-        urlencodePaneLayout.setHorizontalGroup(
-            urlencodePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(urlencodePaneLayout.createSequentialGroup()
+        javax.swing.GroupLayout rawPaneLayout = new javax.swing.GroupLayout(rawPane);
+        rawPane.setLayout(rawPaneLayout);
+        rawPaneLayout.setHorizontalGroup(
+            rawPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(rawPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 895, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        urlencodePaneLayout.setVerticalGroup(
-            urlencodePaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(urlencodePaneLayout.createSequentialGroup()
+        rawPaneLayout.setVerticalGroup(
+            rawPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(rawPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
                 .addContainerGap())
         );
-
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, radioRaw, org.jdesktop.beansbinding.ELProperty.create("${selected}"), rawPane, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
 
         BodyTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -285,26 +254,26 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
 
-        rawPane.setLayer(jScrollPane6, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        rawPane.setLayer(AddRowBodyButton, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        urlencodedPane.setLayer(jScrollPane6, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        urlencodedPane.setLayer(AddRowBodyButton, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        javax.swing.GroupLayout rawPaneLayout = new javax.swing.GroupLayout(rawPane);
-        rawPane.setLayout(rawPaneLayout);
-        rawPaneLayout.setHorizontalGroup(
-            rawPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(rawPaneLayout.createSequentialGroup()
+        javax.swing.GroupLayout urlencodedPaneLayout = new javax.swing.GroupLayout(urlencodedPane);
+        urlencodedPane.setLayout(urlencodedPaneLayout);
+        urlencodedPaneLayout.setHorizontalGroup(
+            urlencodedPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(urlencodedPaneLayout.createSequentialGroup()
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 834, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(AddRowBodyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 23, Short.MAX_VALUE))
         );
-        rawPaneLayout.setVerticalGroup(
-            rawPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(rawPaneLayout.createSequentialGroup()
+        urlencodedPaneLayout.setVerticalGroup(
+            urlencodedPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(urlencodedPaneLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(rawPaneLayout.createSequentialGroup()
+            .addGroup(urlencodedPaneLayout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addComponent(AddRowBodyButton)
                 .addContainerGap(167, Short.MAX_VALUE))
@@ -320,16 +289,16 @@ public class HomePage extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(radioRaw)
                 .addGap(18, 18, 18)
-                .addComponent(requestContentType, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbRequestContentType, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(rawPane)
+                .addComponent(urlencodedPane)
                 .addContainerGap())
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(urlencodePane)
+                    .addComponent(rawPane)
                     .addContainerGap()))
         );
         jPanel3Layout.setVerticalGroup(
@@ -339,26 +308,53 @@ public class HomePage extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioUrlencoded)
                     .addComponent(radioRaw)
-                    .addComponent(requestContentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbRequestContentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rawPane)
+                .addComponent(urlencodedPane)
                 .addContainerGap())
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
                     .addGap(33, 33, 33)
-                    .addComponent(urlencodePane)
+                    .addComponent(rawPane)
                     .addContainerGap()))
         );
 
         RequestPane.addTab("Body", jPanel3);
 
+        jLabel3.setText("Type");
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No Auth", "Basic Auth", "OAuth 1.0", "OAuth 2.0" }));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addGap(98, 98, 98)
+                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(728, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(239, Short.MAX_VALUE))
+        );
+
+        RequestPane.addTab("Authorization", jPanel1);
+
         jLabel1.setText("Response");
 
         jLabel2.setText("Status:");
 
-        HeaderResponse.setColumns(20);
-        HeaderResponse.setRows(5);
-        jScrollPane3.setViewportView(HeaderResponse);
+        txtHeaderResponse.setColumns(20);
+        txtHeaderResponse.setRows(5);
+        jScrollPane3.setViewportView(txtHeaderResponse);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -375,23 +371,24 @@ public class HomePage extends javax.swing.JFrame {
 
         ResponsePane.addTab("Header", jPanel5);
 
-        BodyResponse.setColumns(20);
-        BodyResponse.setRows(5);
-        jScrollPane4.setViewportView(BodyResponse);
+        txtBodyResponse.setColumns(20);
+        txtBodyResponse.setRows(5);
+        jScrollPane4.setViewportView(txtBodyResponse);
 
-        ResponeContentType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "XML", "HTML", "JSON", "RAW" }));
-        ResponeContentType.addItemListener(new java.awt.event.ItemListener() {
+        cbResponeContentType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- none -", "XML", "HTML", "JSON", "RAW" }));
+        cbResponeContentType.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                ResponeContentTypeItemStateChanged(evt);
+                cbResponeContentTypeItemStateChanged(evt);
             }
         });
-        ResponeContentType.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+        cbResponeContentType.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                ResponeContentTypePropertyChange(evt);
+                cbResponeContentTypePropertyChange(evt);
             }
         });
 
         btnPreviewHtml.setText("Preview");
+        btnPreviewHtml.setEnabled(false);
         btnPreviewHtml.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPreviewHtmlActionPerformed(evt);
@@ -404,7 +401,7 @@ public class HomePage extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(ResponeContentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbResponeContentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnPreviewHtml)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -417,7 +414,7 @@ public class HomePage extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addGap(2, 2, 2)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ResponeContentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbResponeContentType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnPreviewHtml))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -471,7 +468,7 @@ public class HomePage extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(SubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnParams, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(89, 89, 89))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(ResponsePane, javax.swing.GroupLayout.PREFERRED_SIZE, 941, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -491,7 +488,7 @@ public class HomePage extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(method_combobox, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(url_string, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnParams, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(SubmitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(RequestPane)
@@ -523,8 +520,6 @@ public class HomePage extends javax.swing.JFrame {
 
     private void SubmitButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SubmitButtonMouseClicked
         // TODO add your handling code here:
-
-        resetRespones();
         String url = url_string.getText();
         String method = method_combobox.getSelectedItem().toString();
         if (null == method) {
@@ -536,7 +531,7 @@ public class HomePage extends javax.swing.JFrame {
 //         String[] value = new String[10];
 
         try {
-            requester = new HttpRequester(new URI(url));
+            requester = new HttpRequester(new URL(url));
             requester.setRequestHeaders(this.getRequestHeaders());
             requester.setBody(getRequestBody());
 
@@ -564,12 +559,12 @@ public class HomePage extends javax.swing.JFrame {
             loadResponseHeader();
             loadResponseCookies();
 
+        } catch (IllegalArgumentException | MalformedURLException ex) {
+            lblResponseStatus.setText("Error!!!");
+            JOptionPane.showMessageDialog(null, "URL is not absolute!", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (IOException ex) {
+            lblResponseStatus.setText("Error!!!");
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
-
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "URL syntax not correct!", "Error", ERROR);
         } catch (NullPointerException ex) {
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -597,23 +592,23 @@ public class HomePage extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_AddRowHeaderButtonActionPerformed
 
-    private void ResponeContentTypePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_ResponeContentTypePropertyChange
+    private void cbResponeContentTypePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cbResponeContentTypePropertyChange
         // TODO add your handling code here:
 
 
-    }//GEN-LAST:event_ResponeContentTypePropertyChange
+    }//GEN-LAST:event_cbResponeContentTypePropertyChange
 
-    private void ResponeContentTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ResponeContentTypeItemStateChanged
+    private void cbResponeContentTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbResponeContentTypeItemStateChanged
         // TODO add your handling code here:
 
         String bodyResponse = requester.getResponseBody();
-        String contentType = ResponeContentType.getSelectedItem().toString();
+        String contentType = cbResponeContentType.getSelectedItem().toString();
         if (null == contentType) {
-            ResponeContentType.setSelectedItem("RAW");
+            cbResponeContentType.setSelectedItem("RAW");
             //BodyResponse.setText(bodyResponse);
 
         } else {
-            String parseData;
+            String parseData = "";
             switch (contentType) {
                 case "HTML":
                 case "XML": {
@@ -626,20 +621,26 @@ public class HomePage extends javax.swing.JFrame {
                 break;
                 case "Text":
                 case "RAW":
-                default:
                     parseData = bodyResponse;
                     break;
+                default:
+                    break;
             }
-            BodyResponse.setText("");
-            BodyResponse.append(parseData);
+            txtBodyResponse.setText("");
+            txtBodyResponse.append(parseData);
         }
 
-    }//GEN-LAST:event_ResponeContentTypeItemStateChanged
+    }//GEN-LAST:event_cbResponeContentTypeItemStateChanged
 
     private void btnPreviewHtmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviewHtmlActionPerformed
         // TODO add your handling code here:
         previewBrowser();
     }//GEN-LAST:event_btnPreviewHtmlActionPerformed
+
+    private void SubmitButtonMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SubmitButtonMousePressed
+        // TODO add your handling code here:
+        resetRespones();
+    }//GEN-LAST:event_SubmitButtonMousePressed
 
     /**
      * @param args the command line arguments
@@ -679,18 +680,17 @@ public class HomePage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddRowBodyButton;
     private javax.swing.JButton AddRowHeaderButton;
-    private javax.swing.JTextArea BodyResponse;
     private javax.swing.JTable BodyTable;
     private javax.swing.JTable CookiesTable;
-    private javax.swing.JTextArea HeaderResponse;
     private javax.swing.JTable HeaderTable;
     private javax.swing.JTabbedPane RequestPane;
-    private javax.swing.JComboBox<String> ResponeContentType;
     private javax.swing.JTabbedPane ResponsePane;
     private javax.swing.JButton SubmitButton;
+    private javax.swing.JButton btnParams;
     private javax.swing.JButton btnPreviewHtml;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox<String> cbRequestContentType;
+    private javax.swing.JComboBox<String> cbResponeContentType;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -708,15 +708,16 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lblResponseStatus;
     private javax.swing.JComboBox<String> method_combobox;
     private javax.swing.JRadioButton radioRaw;
     private javax.swing.JRadioButton radioUrlencoded;
     private javax.swing.JLayeredPane rawPane;
-    private javax.swing.JComboBox<String> requestContentType;
+    private javax.swing.JTextArea txtBodyRequest;
+    private javax.swing.JTextArea txtBodyResponse;
+    private javax.swing.JTextArea txtHeaderResponse;
     private javax.swing.JTextField url_string;
-    private javax.swing.JLayeredPane urlencodePane;
+    private javax.swing.JLayeredPane urlencodedPane;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
@@ -724,14 +725,25 @@ public class HomePage extends javax.swing.JFrame {
     protected HttpRequester requester = null;
 
     protected void resetRespones() {
-        lblResponseStatus.setText("");
-        BodyResponse.setText("");
-        HeaderResponse.setText("");
+        lblResponseStatus.setText("Sending...");
+        txtBodyResponse.setText("");
+        txtHeaderResponse.setText("");
+        try {
+            cbResponeContentType.setSelectedIndex(0);
+        } catch (Exception e) {
+        }
+
     }
 
     protected Headers getRequestHeaders() {
         Headers requestHeaders = new Headers();
-        requestHeaders.addEntity(new Header("Content-Type", ContentType.URLENC.toString()));
+        String contentTypeStr = "";
+        if (radioRaw.isSelected()) {
+            contentTypeStr = "application/x-www-form-urlencoded";
+        } else {
+            contentTypeStr = cbRequestContentType.getSelectedItem().toString().trim();
+        }
+        requestHeaders.addEntity(new Header("Content-Type", contentTypeStr));
         for (int i = 0; i < HeaderTable.getRowCount(); ++i) {
             boolean isAdd = Boolean.valueOf(BodyTable.getValueAt(i, 0).toString());
             if (isAdd && HeaderTable.getValueAt(i, 0) != null && HeaderTable.getValueAt(i, 1) != null) {
@@ -744,33 +756,38 @@ public class HomePage extends javax.swing.JFrame {
     }
 
     protected String getRequestBody() {
-
-        Headers bodyKeysValues = new Headers();
-        for (int i = 0; i < BodyTable.getRowCount(); ++i) {
-            boolean isAdd = Boolean.valueOf(BodyTable.getValueAt(i, 0).toString());
-            if (isAdd && BodyTable.getValueAt(i, 0) != null && BodyTable.getValueAt(i, 1) != null) {
-                String key = BodyTable.getValueAt(i, 1).toString();
-                String value = BodyTable.getValueAt(i, 2).toString();
-                bodyKeysValues.addEntity(new Header(key, value));
-            }
-        }
-
         String body = "";
-        try {
-            body = new BodyBuilder()
-                    .setContentType(ContentType.URLENC.toString())
-                    .setKeysAndValues(bodyKeysValues)
-                    .build();
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
+        if (radioUrlencoded.isSelected()) {
+            Headers bodyKeysValues = new Headers();
+            for (int i = 0; i < BodyTable.getRowCount(); ++i) {
+                boolean isAdd = Boolean.valueOf(BodyTable.getValueAt(i, 0).toString());
+                if (isAdd && BodyTable.getValueAt(i, 0) != null && BodyTable.getValueAt(i, 1) != null) {
+                    String key = BodyTable.getValueAt(i, 1).toString();
+                    String value = BodyTable.getValueAt(i, 2).toString();
+                    bodyKeysValues.addEntity(new Header(key, value));
+                }
+            }
+
+            try {
+                body = new BodyBuilder()
+                        .setContentType(ContentType.URLENC.toString())
+                        .setKeysAndValues(bodyKeysValues)
+                        .build();
+            } catch (UnsupportedEncodingException ex) {
+                Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+            body = txtBodyRequest.getText().trim();
         }
+        System.out.println("RequestBody :" + body);
         return body;
     }
 
     protected void loadResponseHeader() {
         System.out.println("Load Response Headers...");
 
-        HeaderResponse.setText(requester.getResponeHeaders().toString());
+        txtHeaderResponse.setText(requester.getResponeHeaders().toString());
         lblResponseStatus.setText(requester.getStatusCode() + " - " + requester.getStatusMessage());
         System.out.println("Load Response Headers Completed.");
     }
@@ -778,7 +795,6 @@ public class HomePage extends javax.swing.JFrame {
     protected void loadResponseBody() {
         btnPreviewHtml.setEnabled(false);
         System.out.println("Load Response Body...");
-
         String ct = ContentType.ANY.toString();
         if (requester.getResponeHeaders().hasEntity("Content-Type")) {
             ct = requester.getResponeHeaders().getValue("Content-Type");
@@ -786,16 +802,16 @@ public class HomePage extends javax.swing.JFrame {
         switch (ContentType.fromContentType(ct)) {
             case HTML:
                 btnPreviewHtml.setEnabled(true);
-                ResponeContentType.setSelectedItem("HTML");
+                cbResponeContentType.setSelectedItem("HTML");
                 break;
             case XML:
-                ResponeContentType.setSelectedItem("XML");
+                cbResponeContentType.setSelectedItem("XML");
                 break;
             case JSON:
-                ResponeContentType.setSelectedItem("JSON");
+                cbResponeContentType.setSelectedItem("JSON");
                 break;
             default:
-                ResponeContentType.setSelectedItem("RAW");
+                cbResponeContentType.setSelectedItem("RAW");
         }
         System.out.println("Load Response Body Completed.");
 
@@ -808,7 +824,7 @@ public class HomePage extends javax.swing.JFrame {
         ctModel.getDataVector().removeAllElements();
 
         List<Cookie> listCookie = requester.getCookies().getEntities();
-
+        CookiesManager.getInstance().addCookies(listCookie);
         for (Cookie c : listCookie) {
             Object[] col = new Object[7];
             col[0] = c.getKey();
@@ -827,21 +843,35 @@ public class HomePage extends javax.swing.JFrame {
 
     protected void previewBrowser() {
         String bodyResponse = requester.getResponseBody();
-        Browser browser = new Browser();
-        BrowserView browswerView = new BrowserView(browser);
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new selectBrowser(bodyResponse).setVisible(true);
+            }
+        });
+    }
 
-        JFrame frame = new JFrame();
-        frame.add(browswerView, BorderLayout.CENTER);
-        frame.setSize(700, 500);
-        frame.setVisible(true);
-        String method = method_combobox.getSelectedItem().toString();
-        if (method == "GET") {
-            String url = url_string.getText();
-            browser.loadURL(url);
-        } else {
-            browser.loadHTML(bodyResponse);
-        }
+    private void myInitHomePage() {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        radioRaw.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (radioRaw.isSelected()) {
+                    urlencodedPane.setVisible(false);
+                    rawPane.setVisible(true);
+                }
+            }
+        });
 
-        selectBrowser sB = new selectBrowser(browser);
+        radioUrlencoded.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (radioUrlencoded.isSelected()) {
+                    urlencodedPane.setVisible(true);
+                    rawPane.setVisible(false);
+                }
+            }
+        });
+
+        radioUrlencoded.setSelected(true);
     }
 }
