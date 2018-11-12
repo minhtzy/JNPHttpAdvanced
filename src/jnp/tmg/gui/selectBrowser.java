@@ -51,10 +51,18 @@ public class selectBrowser extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         AreaResult = new javax.swing.JTextArea();
         choseCombo = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        getHtmlBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Nhập từ khóa");
+
+        inputTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputTxtActionPerformed(evt);
+            }
+        });
 
         viewBtn.setText("Xem");
         viewBtn.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -69,40 +77,53 @@ public class selectBrowser extends javax.swing.JFrame {
 
         choseCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "id", "tagName", "class", "name", "xpath" }));
 
+        jLabel2.setText("Hoặc:");
+
+        getHtmlBtn.setText("Lấy HTML đã chọn");
+        getHtmlBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                getHtmlBtnMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
                 .addGap(18, 18, 18)
-                .addComponent(inputTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(inputTxt, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
+                    .addComponent(getHtmlBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(choseCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(viewBtn)
                 .addContainerGap(127, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(inputTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(viewBtn)
-                            .addComponent(choseCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(jLabel1)))
-                .addGap(28, 28, 28)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
+                .addGap(25, 25, 25)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(viewBtn)
+                    .addComponent(choseCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(inputTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel2)
+                    .addComponent(getHtmlBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 320, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -131,7 +152,6 @@ public class selectBrowser extends javax.swing.JFrame {
     private void viewBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewBtnMouseClicked
         // TODO add your handling code here:
         DOMDocument document = browser.getDocument();
-
         String incombo = choseCombo.getSelectedItem().toString();
         String inTxt = inputTxt.getText();
         if (incombo == "id") {
@@ -194,6 +214,18 @@ public class selectBrowser extends javax.swing.JFrame {
 
     }//GEN-LAST:event_viewBtnMouseClicked
 
+    private void inputTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputTxtActionPerformed
+
+    private void getHtmlBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_getHtmlBtnMouseClicked
+        // TODO add your handling code here:
+        DOMDocument document = browser.getDocument();
+        String html = browser.getSelectedHTML();
+        AreaResult.setText("");
+        AreaResult.append(html);
+    }//GEN-LAST:event_getHtmlBtnMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -232,8 +264,10 @@ public class selectBrowser extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea AreaResult;
     private javax.swing.JComboBox<String> choseCombo;
+    private javax.swing.JButton getHtmlBtn;
     private javax.swing.JTextField inputTxt;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
