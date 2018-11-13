@@ -34,10 +34,18 @@ public enum ContentType {
     private static final String PLUS_JSON = "+json";
     private static final String PLUS_HTML = "+html";
 
-    private static String getContentTypeWithoutCharset(String toLowerCase) {
+    public static String getContentTypeWithoutCharset(String toLowerCase) {
         return toLowerCase.split(";")[0].trim();
     }
-
+    public static Charset getCharset(String contentType) {
+        try {
+            String charset = contentType.split(";")[1].trim();
+            return Charset.forName(charset);
+        }
+        catch(Exception ex) {
+            return Charset.defaultCharset();
+        }
+    }
     private final String[] ctStrings;
 
     public String[] getContentTypeStrings() {

@@ -5,19 +5,22 @@
  */
 package jnp.tmg.modules.http;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jnp.tmg.common.KeyAndValue;
-
-import jnp.tmg.modules.assertion.AssertParameter;
 
 /**
  *
  * @author minht
  */
-public class Cookie implements KeyAndValue{
-
+public class Cookie implements KeyAndValue {
+//  RFC 2109 - http://www.ietf.org/rfc/rfc2109.txt
+    
     public static final String COMMENT = "Comment";
     public static final String PATH = "Path";
     public static final String DOMAIN = "Domain";
@@ -31,14 +34,14 @@ public class Cookie implements KeyAndValue{
     private static final String EQUALS = "=";
     private static final int UNDEFINED = -1;
 
-    private  String key;
-    private  String value;
-    private  String comment;
-    private  Date expiryDate;
-    private  String domain;
-    private  String path;
-    private  boolean secured;
-    private  boolean httpOnly;
+    private String key;
+    private String value;
+    private String comment;
+    private Date expiryDate;
+    private String domain;
+    private String path;
+    private boolean secured;
+    private boolean httpOnly;
     private int version;
     private int maxAge;
 
@@ -209,5 +212,54 @@ public class Cookie implements KeyAndValue{
         this.maxAge = maxAge;
     }
 
+    public static Cookie parse(String rawCookie) {
 
+        System.out.println(rawCookie);
+        String[] rawCookieParams = rawCookie.split(";");
+        System.out.println(Arrays.toString(rawCookieParams));
+        String[] rawCookieKeyAndValue = rawCookieParams[0].split("=", 2);
+        if (rawCookieKeyAndValue.length != 2) {
+            return null;
+        }
+        String cookieKey = rawCookieKeyAndValue[0].trim();
+        String cookieValue = rawCookieKeyAndValue[1].trim();
+        Cookie cookie = new Cookie(cookieKey, cookieValue);
+        for (int i = 1; i < rawCookieParams.length; i++) {
+            String rawCookieParamKeyAndValue[] = rawCookieParams[i].trim().split("=", 2);
+            System.out.println("raw key and value : " + Arrays.toString(rawCookieParamKeyAndValue));
+            String paramKey = rawCookieParamKeyAndValue[0].trim();
+
+            if (paramKey.equalsIgnoreCase(SECURE)) {
+                cookie.setSecured(true);
+            } else if (paramKey.equalsIgnoreCase(HTTP_ONLY)) {
+                cookie.setHttpOnly(true);
+            } else {
+                if (rawCookieParamKeyAndValue.length < 2) {
+                    continue;
+                }
+                String paramValue = rawCookieParamKeyAndValue[1].trim();
+                if (paramKey.equalsIgnoreCase(EXPIRES)) {
+                    try {
+                        SimpleDateFormat format = new SimpleDateFormat("EEE, dd-MMM-yyyy HH:mm:ss zzz");
+                        Date expiryDate = format.parse(paramValue);
+                        cookie.setExpiryDate(expiryDate);
+                    } catch (ParseException ex) {
+                        Logger.getLogger(Cookie.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else if (paramKey.equalsIgnoreCase(MAX_AGE)) {
+                    long maxAge = Long.parseLong(paramValue);
+                    Date expiryDate = new Date(System.currentTimeMillis() + maxAge);
+                    cookie.setExpiryDate(expiryDate);
+                } else if (paramKey.equalsIgnoreCase(DOMAIN)) {
+                    cookie.setDomain(paramValue);
+                } else if (paramKey.equalsIgnoreCase(PATH)) {
+                    cookie.setPath(paramValue);
+                } else if (paramKey.equalsIgnoreCase(COMMENT)) {
+                    cookie.setPath(paramValue);
+                }
+            }
+        }
+
+        return cookie;
+    }
 }

@@ -3,8 +3,31 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/tiamo/Documents/Course-%20LTM/JNPHttpAdvanced/src/jnp/tmg/gui/HomePage.java</file>
-            <file>file:/home/tiamo/Documents/Course-%20LTM/JNPHttpAdvanced/src/jnp/tmg/gui/selectBrowser.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/client/Test.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/common/KeyAndValue.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/modules/http/HttpSpecifications.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/modules/http/ContentType.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/utils/HeadersHelper.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/utils/BodyBuilder.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/utils/StringUtils.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/client/HttpRequester.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnphttpadvanced/JNPHttpAdvanced.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/utils/BodyHelper.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/common/MultiValueEntity.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/utils/JsonUtils.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/modules/http/CookiesImpl.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/modules/http/Header.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/config/ClientConfig.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/utils/RequestLogger.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/config/UserConfig.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/gui/HomePage.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/modules/http/Cookies.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/utils/XMLUtils.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/modules/http/Headers.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/gui/selectBrowser.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/modules/http/Cookie.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/utils/IOUtils.java</file>
+            <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/client/CookiesManager.java</file>
         </group>
     </open-files>
 </project-private>

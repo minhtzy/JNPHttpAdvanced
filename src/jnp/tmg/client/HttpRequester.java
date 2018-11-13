@@ -11,25 +11,26 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
-import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import jnp.tmg.modules.assertion.AssertParameter;
 import jnp.tmg.modules.http.Header;
 import jnp.tmg.modules.http.Headers;
 import jnp.tmg.config.ClientConfig;
+import jnp.tmg.modules.http.ContentType;
 import jnp.tmg.modules.http.Cookie;
 import jnp.tmg.modules.http.Cookies;
-import jnp.tmg.utils.CookieHelper;
 import jnp.tmg.utils.IOUtils;
 
 public class HttpRequester {
 
-    private URI uri;
+    private URL url;
     int statusCode;
     String statusMessage;
     private Headers requestHeaders;
@@ -39,20 +40,24 @@ public class HttpRequester {
     private byte[] responeBodyBytes;
 
     public HttpRequester() {
+        requestHeaders = new Headers();
+        responeHeaders = new Headers();
+        requestBody = "";
+        responeBody = "";
     }
 
-    public HttpRequester(URI uri) {
-        this.uri = uri;
+    public HttpRequester(URL url) {
+        this.url = url;
         this.requestHeaders = new Headers(new ArrayList<>());
     }
 
-    public HttpRequester(URI uri, Headers requestHeaders) {
-        this.uri = uri;
+    public HttpRequester(URL url, Headers requestHeaders) {
+        this.url = url;
         this.requestHeaders = requestHeaders;
     }
 
-    public HttpRequester(URI uri, Headers requestHeaders, String requestBody) {
-        this.uri = uri;
+    public HttpRequester(URL url, Headers requestHeaders, String requestBody) {
+        this.url = url;
         this.requestHeaders = requestHeaders;
         this.requestBody = requestBody;
     }
@@ -65,12 +70,12 @@ public class HttpRequester {
         return statusMessage;
     }
 
-    public URI getUrl() {
-        return uri;
+    public URL getUrl() {
+        return url;
     }
 
-    public void setUrl(URI uri) {
-        this.uri = uri;
+    public void setUrl(URL url) {
+        this.url = url;
     }
 
     public Headers getRequestHeaders() {
@@ -94,9 +99,7 @@ public class HttpRequester {
     }
 
     public void sendGet() throws MalformedURLException, IOException {
-        AssertParameter.notNull(uri, "uri");
-
-        URL url = uri.toURL();
+        AssertParameter.notNull(url, "url");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
         con.setRequestMethod(("GET"));
@@ -108,9 +111,7 @@ public class HttpRequester {
     }
 
     public void sendPost() throws MalformedURLException, IOException {
-        AssertParameter.notNull(uri, "uri");
-
-        URL url = uri.toURL();
+        AssertParameter.notNull(url, "url");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
         con.setRequestMethod("POST");
@@ -127,9 +128,7 @@ public class HttpRequester {
     }
 
     public void sendHead() throws MalformedURLException, IOException {
-        AssertParameter.notNull(uri, "uri");
-
-        URL url = uri.toURL();
+        AssertParameter.notNull(url, "url");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
         con.setRequestMethod(("HEAD"));
@@ -141,9 +140,7 @@ public class HttpRequester {
     }
 
     public void sendDelete() throws MalformedURLException, IOException {
-        AssertParameter.notNull(uri, "uri");
-
-        URL url = uri.toURL();
+        AssertParameter.notNull(url, "url");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
         con.setRequestMethod("DELETE");
@@ -161,9 +158,7 @@ public class HttpRequester {
     }
 
     public void sendPut() throws MalformedURLException, ProtocolException, IOException {
-        AssertParameter.notNull(uri, "uri");
-
-        URL url = uri.toURL();
+        AssertParameter.notNull(url, "url");
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
         con.setRequestMethod("PUT");
@@ -184,54 +179,62 @@ public class HttpRequester {
 
         List<Cookie> listCookie = new LinkedList<>();
         for (String sc : strCookies) {
-            try {
-                Cookie cookie = CookieHelper.parseRawCookie(sc);
-                listCookie.add(cookie);
-            } catch (Exception ex) {
-                System.err.println(ex.getMessage());
-            }
+            Cookie cookie = Cookie.parse(sc);
+            listCookie.add(cookie);
         }
 
         return new Cookies(listCookie);
     }
 
-    private void getContent(HttpURLConnection con) throws IOException {
+    private void getContent(HttpURLConnection con) {
         System.out.println("Get Content....");
         if (con != null) {
-            statusCode = con.getResponseCode();
-            statusMessage = con.getResponseMessage();
-            int responeCode = con.getResponseCode();
-            System.out.println("Status: " + responeCode + " " + con.getResponseMessage());
+            try {
+                statusCode = con.getResponseCode();
+                statusMessage = con.getResponseMessage();
+                int responeCode = con.getResponseCode();
+                System.out.println("Status: " + responeCode + " " + con.getResponseMessage());
 
-            System.out.println("Get Headers...");
-            Map<String, List<String>> headers = con.getHeaderFields();
+                System.out.println("Get Headers...");
+                Map<String, List<String>> headers = con.getHeaderFields();
 
-            List<Header> listHeaders = new LinkedList<>();
-            System.out.println(headers);
-            headers.entrySet().forEach((entry) -> {
+                List<Header> listHeaders = new LinkedList<>();
+                System.out.println(headers);
+                headers.entrySet().forEach((entry) -> {
 
-                String key = entry.getKey();
-                List<String> value = entry.getValue();
-                if (key != null && value != null) {
-                    for (String vString : value) {
-                        Header header = new Header(key, vString);
-                        listHeaders.add(header);
+                    String key = entry.getKey();
+                    List<String> value = entry.getValue();
+                    if (key != null && value != null) {
+                        for (String vString : value) {
+                            Header header = new Header(key, vString);
+                            listHeaders.add(header);
+                        }
+
                     }
-
-                }
 //                System.out.println(key + "=" + value);
 //                System.out.println(header);
-            });
+                });
 
-            System.out.println("Get Header Completed");
-            responeHeaders = new Headers(listHeaders);
-            try (InputStream input = con.getInputStream()) {
-                if (input != null) {
-                    System.out.println("Get Body...");
-                    responeBodyBytes = IOUtils.toByteArray(input);
-                    responeBody = new String(responeBodyBytes);
-                    System.out.println("Get Body Completed");
+                System.out.println("Get Header Completed");
+                responeHeaders = new Headers(listHeaders);
+                try (InputStream input = con.getInputStream()) {
+                    if (input != null) {
+                        System.out.println("Get Body...");
+                        responeBodyBytes = IOUtils.toByteArray(input);
+
+                        Charset charset;
+                        if (this.getResponeHeaders().hasEntity("Content-Type")) {
+                            charset = ContentType.getCharset(getResponeHeaders().getValue("Content-Type").trim());
+                        } else {
+                            charset = Charset.forName("UTF-8");
+                        }
+                        responeBody = new String(responeBodyBytes, charset);
+                        System.out.println("Get Body Completed");
+                    }
+                } catch (IOException ex) {
                 }
+            } catch (IOException ex) {
+                Logger.getLogger(HttpRequester.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

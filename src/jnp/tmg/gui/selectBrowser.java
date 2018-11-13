@@ -9,8 +9,12 @@ import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.dom.By;
 import com.teamdev.jxbrowser.chromium.dom.DOMDocument;
 import com.teamdev.jxbrowser.chromium.dom.DOMElement;
+import com.teamdev.jxbrowser.chromium.swing.BrowserView;
+import java.awt.BorderLayout;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JFrame;
+import jnp.tmg.utils.XMLUtils;
 
 /**
  *
@@ -19,19 +23,19 @@ import java.util.Map;
 public class selectBrowser extends javax.swing.JFrame {
 
     Browser browser;
-
+    String htmlFile;
     /**
      * Creates new form selectBrowser
      */
 
-    public selectBrowser(Browser browser) {
-        this.browser = browser;
+    public selectBrowser(String htmlFile) {
+        this.htmlFile = htmlFile;
         initComponents();
-        this.setVisible(true);
+        initBroswer();
     }
 
     private selectBrowser() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -54,7 +58,7 @@ public class selectBrowser extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         getHtmlBtn = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Nhập từ khóa");
 
@@ -154,7 +158,7 @@ public class selectBrowser extends javax.swing.JFrame {
         DOMDocument document = browser.getDocument();
         String incombo = choseCombo.getSelectedItem().toString();
         String inTxt = inputTxt.getText();
-        if (incombo == "id") {
+        if ("id".equals(incombo)) {
           DOMElement element = document.findElement(By.id(inTxt));
           AreaResult.setText("");
           Map<String, String> attributes = element.getAttributes();
@@ -164,7 +168,7 @@ public class selectBrowser extends javax.swing.JFrame {
                     AreaResult.append(attrName + " = " + attributes.get(attrName) + "\n");
                 }
                 
-        } else if (incombo == "tagName") {
+        } else if ("tagName".equals(incombo)) {
             
             List<DOMElement> elements = document.findElements(By.tagName(inTxt));
             AreaResult.setText("");
@@ -176,7 +180,7 @@ public class selectBrowser extends javax.swing.JFrame {
                     AreaResult.append(attrName + " = " + attributes.get(attrName) + "\n");
                 }
             }
-        } else if (incombo == "class"){
+        } else if ("class".equals(incombo)){
             List<DOMElement> elements = document.findElements(By.className(inTxt));
             AreaResult.setText("");
             for (int i = 0; i < elements.size(); i++) {
@@ -187,7 +191,7 @@ public class selectBrowser extends javax.swing.JFrame {
                     AreaResult.append(attrName + " = " + attributes.get(attrName) + "\n");
                 }
             }
-        } else if (incombo == "name"){
+        } else if ("name".equals(incombo)){
             List<DOMElement> elements = document.findElements(By.name(inTxt));
             AreaResult.setText("");
             for (int i = 0; i < elements.size(); i++) {
@@ -198,7 +202,7 @@ public class selectBrowser extends javax.swing.JFrame {
                     AreaResult.append(attrName + " = " + attributes.get(attrName) + "\n");
                 }
             }
-        } else if (incombo == "xpath"){
+        } else if ("xpath".equals(incombo)){
             List<DOMElement> elements = document.findElements(By.xpath(inTxt));
             AreaResult.setText("");
             for (int i = 0; i < elements.size(); i++) {
@@ -223,7 +227,7 @@ public class selectBrowser extends javax.swing.JFrame {
         DOMDocument document = browser.getDocument();
         String html = browser.getSelectedHTML();
         AreaResult.setText("");
-        AreaResult.append(html);
+        AreaResult.append(XMLUtils.prettyXMLJsoup(html));
     }//GEN-LAST:event_getHtmlBtnMouseClicked
 
     /**
@@ -273,4 +277,19 @@ public class selectBrowser extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JButton viewBtn;
     // End of variables declaration//GEN-END:variables
+
+    private void initBroswer() { 
+        this.browser = new Browser();
+        BrowserView browserView = new BrowserView(browser);
+ 
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        frame.add(browserView, BorderLayout.CENTER);
+        frame.setSize(800, 600);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        
+        browser.loadHTML(htmlFile);
+        
+    }
 }

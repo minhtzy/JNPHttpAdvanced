@@ -5,7 +5,7 @@
  */
 package jnp.tmg.client;
 
-import java.net.URI;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jnp.tmg.modules.http.Header;
@@ -16,7 +16,7 @@ public class Test {
 
     public static void main(String[] args) {
         try {
-            HttpRequester client = new HttpRequester(new URI("http://airtravelling.net/hot-deals"));
+            HttpRequester client = new HttpRequester(new URL("http://airtravelling.net/hot-deals"));
             
             Headers requestHeader = new Headers();
             requestHeader.getEntities().add(new Header("Content-Type","application/x-www-form-urlencoded"));

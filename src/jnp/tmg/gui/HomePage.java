@@ -746,8 +746,8 @@ public class HomePage extends javax.swing.JFrame {
         }
         requestHeaders.addEntity(new Header("Content-Type", contentTypeStr));
         for (int i = 0; i < HeaderTable.getRowCount(); ++i) {
-            boolean isAdd = Boolean.valueOf(BodyTable.getValueAt(i, 0).toString());
-            if (isAdd && HeaderTable.getValueAt(i, 0) != null && HeaderTable.getValueAt(i, 1) != null) {
+            boolean isAdd = Boolean.valueOf(HeaderTable.getValueAt(i, 0).toString());
+            if (isAdd && HeaderTable.getValueAt(i, 1) != null && HeaderTable.getValueAt(i, 2) != null) {
                 String key = HeaderTable.getValueAt(i, 1).toString();
                 String value = HeaderTable.getValueAt(i, 2).toString();
                 requestHeaders.addEntity(new Header(key, value));
@@ -762,7 +762,7 @@ public class HomePage extends javax.swing.JFrame {
             Headers bodyKeysValues = new Headers();
             for (int i = 0; i < BodyTable.getRowCount(); ++i) {
                 boolean isAdd = Boolean.valueOf(BodyTable.getValueAt(i, 0).toString());
-                if (isAdd && BodyTable.getValueAt(i, 0) != null && BodyTable.getValueAt(i, 1) != null) {
+                if (isAdd && BodyTable.getValueAt(i, 1) != null && BodyTable.getValueAt(i, 2) != null) {
                     String key = BodyTable.getValueAt(i, 1).toString();
                     String value = BodyTable.getValueAt(i, 2).toString();
                     bodyKeysValues.addEntity(new Header(key, value));

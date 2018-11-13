@@ -50,7 +50,7 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="SubmitButton" min="-2" pref="91" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jButton2" min="-2" pref="91" max="-2" attributes="0"/>
+                      <Component id="btnParams" min="-2" pref="91" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="89" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
@@ -76,7 +76,7 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="method_combobox" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                   <Component id="url_string" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
-                  <Component id="jButton2" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
+                  <Component id="btnParams" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
                   <Component id="SubmitButton" alignment="3" min="-2" pref="37" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -124,10 +124,11 @@
       </Properties>
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="SubmitButtonMouseClicked"/>
+        <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="SubmitButtonMousePressed"/>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SubmitButtonActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="btnParams">
       <Properties>
         <Property name="text" type="java.lang.String" value="Params"/>
       </Properties>
@@ -143,63 +144,6 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
-        <Container class="javax.swing.JPanel" name="jPanel1">
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Authorization">
-                <Property name="tabTitle" type="java.lang.String" value="Authorization"/>
-              </JTabbedPaneConstraints>
-            </Constraint>
-          </Constraints>
-
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="98" max="-2" attributes="0"/>
-                      <Component id="jComboBox2" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="728" max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jComboBox2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="239" max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-          </Layout>
-          <SubComponents>
-            <Component class="javax.swing.JLabel" name="jLabel3">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Type"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JComboBox" name="jComboBox2">
-              <Properties>
-                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
-                    <StringItem index="0" value="No Auth"/>
-                    <StringItem index="1" value="Basic Auth"/>
-                    <StringItem index="2" value="OAuth 1.0"/>
-                    <StringItem index="3" value="OAuth 2.0"/>
-                  </StringArray>
-                </Property>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-              </AuxValues>
-            </Component>
-          </SubComponents>
-        </Container>
         <Container class="javax.swing.JPanel" name="jPanel2">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
@@ -307,18 +251,18 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="radioRaw" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="requestContentType" min="-2" pref="135" max="-2" attributes="0"/>
+                      <Component id="cbRequestContentType" min="-2" pref="135" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="rawPane" max="32767" attributes="0"/>
+                      <Component id="urlencodedPane" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="urlencodePane" max="32767" attributes="0"/>
+                          <Component id="rawPane" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -331,16 +275,16 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="radioUrlencoded" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="radioRaw" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="requestContentType" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbRequestContentType" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="rawPane" max="32767" attributes="0"/>
+                      <Component id="urlencodedPane" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Group type="103" rootIndex="1" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-                          <Component id="urlencodePane" max="32767" attributes="0"/>
+                          <Component id="rawPane" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -353,7 +297,6 @@
                 <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
                   <ComponentRef name="buttonGroup1"/>
                 </Property>
-                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="x-www-form-urlencoded"/>
               </Properties>
             </Component>
@@ -365,30 +308,27 @@
                 <Property name="text" type="java.lang.String" value="raw"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JComboBox" name="requestContentType">
+            <Component class="javax.swing.JComboBox" name="cbRequestContentType">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                   <StringArray count="6">
-                    <StringItem index="0" value="JSON(application/json)"/>
-                    <StringItem index="1" value="XML(text/xml)"/>
-                    <StringItem index="2" value="XML(application/xml)"/>
-                    <StringItem index="3" value="HTML(text/html)"/>
-                    <StringItem index="4" value="JAVASCRIPT(application/javascript)"/>
-                    <StringItem index="5" value="TEXT(text/plain)"/>
+                    <StringItem index="0" value="application/json"/>
+                    <StringItem index="1" value="text/xml"/>
+                    <StringItem index="2" value="application/xml"/>
+                    <StringItem index="3" value="text/html"/>
+                    <StringItem index="4" value="application/javascript"/>
+                    <StringItem index="5" value="text/plain"/>
                   </StringArray>
                 </Property>
               </Properties>
               <BindingProperties>
-                <BindingProperty name="enabled" source="radioRaw" sourcePath="${selected}" target="requestContentType" targetPath="enabled" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="enabled" source="radioRaw" sourcePath="${selected}" target="cbRequestContentType" targetPath="enabled" updateStrategy="0" immediately="false"/>
               </BindingProperties>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Container class="javax.swing.JLayeredPane" name="urlencodePane">
-              <BindingProperties>
-                <BindingProperty name="enabled" source="radioUrlencoded" sourcePath="${selected}" target="urlencodePane" targetPath="enabled" updateStrategy="0" immediately="false"/>
-              </BindingProperties>
+            <Container class="javax.swing.JLayeredPane" name="rawPane">
 
               <Layout>
                 <DimensionLayout dim="0">
@@ -418,7 +358,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JTextArea" name="jTextArea1">
+                    <Component class="javax.swing.JTextArea" name="txtBodyRequest">
                       <Properties>
                         <Property name="columns" type="int" value="20"/>
                         <Property name="rows" type="int" value="5"/>
@@ -428,10 +368,7 @@
                 </Container>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JLayeredPane" name="rawPane">
-              <BindingProperties>
-                <BindingProperty name="enabled" source="radioRaw" sourcePath="${selected}" target="rawPane" targetPath="enabled" updateStrategy="0" immediately="false"/>
-              </BindingProperties>
+            <Container class="javax.swing.JLayeredPane" name="urlencodedPane">
 
               <Layout>
                 <DimensionLayout dim="0">
@@ -521,6 +458,63 @@
             </Container>
           </SubComponents>
         </Container>
+        <Container class="javax.swing.JPanel" name="jPanel1">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
+              <JTabbedPaneConstraints tabName="Authorization">
+                <Property name="tabTitle" type="java.lang.String" value="Authorization"/>
+              </JTabbedPaneConstraints>
+            </Constraint>
+          </Constraints>
+
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="98" max="-2" attributes="0"/>
+                      <Component id="jComboBox2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="728" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jComboBox2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="239" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
+          <SubComponents>
+            <Component class="javax.swing.JLabel" name="jLabel3">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Type"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="jComboBox2">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="4">
+                    <StringItem index="0" value="No Auth"/>
+                    <StringItem index="1" value="Basic Auth"/>
+                    <StringItem index="2" value="OAuth 1.0"/>
+                    <StringItem index="3" value="OAuth 2.0"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+          </SubComponents>
+        </Container>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JLabel" name="jLabel1">
@@ -574,7 +568,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTextArea" name="HeaderResponse">
+                <Component class="javax.swing.JTextArea" name="txtHeaderResponse">
                   <Properties>
                     <Property name="columns" type="int" value="20"/>
                     <Property name="rows" type="int" value="5"/>
@@ -598,7 +592,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="ResponeContentType" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbResponeContentType" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnPreviewHtml" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -614,7 +608,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="ResponeContentType" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cbResponeContentType" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnPreviewHtml" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
@@ -631,7 +625,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTextArea" name="BodyResponse">
+                <Component class="javax.swing.JTextArea" name="txtBodyResponse">
                   <Properties>
                     <Property name="columns" type="int" value="20"/>
                     <Property name="rows" type="int" value="5"/>
@@ -639,20 +633,21 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JComboBox" name="ResponeContentType">
+            <Component class="javax.swing.JComboBox" name="cbResponeContentType">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="4">
-                    <StringItem index="0" value="XML"/>
-                    <StringItem index="1" value="HTML"/>
-                    <StringItem index="2" value="JSON"/>
-                    <StringItem index="3" value="RAW"/>
+                  <StringArray count="5">
+                    <StringItem index="0" value="- none -"/>
+                    <StringItem index="1" value="XML"/>
+                    <StringItem index="2" value="HTML"/>
+                    <StringItem index="3" value="JSON"/>
+                    <StringItem index="4" value="RAW"/>
                   </StringArray>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="ResponeContentTypeItemStateChanged"/>
-                <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="ResponeContentTypePropertyChange"/>
+                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cbResponeContentTypeItemStateChanged"/>
+                <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="cbResponeContentTypePropertyChange"/>
               </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
@@ -661,6 +656,7 @@
             <Component class="javax.swing.JButton" name="btnPreviewHtml">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Preview"/>
+                <Property name="enabled" type="boolean" value="false"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPreviewHtmlActionPerformed"/>

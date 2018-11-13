@@ -24,6 +24,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import jnp.tmg.modules.assertion.AssertParameter;
 import org.jsoup.Jsoup;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
@@ -65,6 +66,7 @@ public class XMLUtils {
     }
 
     public static String prettyXMLJsoup(String xml) {
+        AssertParameter.notNull(xml,"XML");
         org.jsoup.nodes.Document doc = Jsoup.parse(xml);
         doc.outputSettings().indentAmount(4);
         doc.outputSettings().charset("UTF-8");

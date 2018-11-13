@@ -27,10 +27,13 @@ public class Cookies extends MultiValueEntity<Cookie>{
     }
     
     public void addCookies(Cookie... additionalCookies) {
-        AssertParameter.notNull(this, "Cookie");
+        AssertParameter.notNull(additionalCookies, "Cookie");
         entities.addAll(Arrays.asList(additionalCookies));
     }
-    
+    public void addCookies(List<Cookie> additionalCookies) {
+        AssertParameter.notNull(additionalCookies, "cookies");
+        entities.addAll(additionalCookies);
+    }
     public static void addCookies(Cookies cookies , Cookie... additionalCookies) {
         cookies.addCookies(additionalCookies);
     }

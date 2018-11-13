@@ -1,8 +1,3 @@
-/**
- *
- * MultiValueEntity
- * Created by @minht on Oct 15, 2018
- */
 package jnp.tmg.common;
 
 import java.util.ArrayList;

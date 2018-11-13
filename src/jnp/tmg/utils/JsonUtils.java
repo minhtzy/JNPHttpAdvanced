@@ -27,7 +27,7 @@ public class JsonUtils {
         JSONObject jsonObject = XML.toJSONObject(xml);
         return jsonObject;
     }
-    
+
     public static String prettyJson(JSONObject jsonObject) {
         try {
             String prettyString = jsonObject.toString(PRERTTY_STRING_INDENT_FACTOR);
@@ -37,26 +37,21 @@ public class JsonUtils {
         }
         return jsonObject.toString();
     }
+
     public static String prettyJson(String rawData) {
         try {
-            JSONObject json = new JSONObject(rawData);
+            String data = rawData.replaceAll("[\\\\r\\\\n]+", "");
+            JSONObject json = new JSONObject(data);
             return json.toString(PRERTTY_STRING_INDENT_FACTOR);
-        } catch (JSONException ex) {
-            Logger.getLogger(JsonUtils.class.getName()).log(Level.SEVERE, null, ex);   
+        } catch (Exception ex) {
+            Logger.getLogger(JsonUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
         return rawData;
     }
 
     public static String prettyJson(byte[] rawData) {
-        
-        try {
-            String strData = new String(rawData, "UTF-8");
-            JSONObject json = new JSONObject(strData);
-            return json.toString(PRERTTY_STRING_INDENT_FACTOR);
-        } catch (Exception ex) {
-            Logger.getLogger(JsonUtils.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return new String(rawData);
+        String strData = new String(rawData);
+        return prettyJson(strData);
     }
 
 }

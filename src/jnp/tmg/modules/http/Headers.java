@@ -22,15 +22,15 @@ public class Headers extends MultiValueEntity<Header>{
         super(entities);
     }
     
-//    @Override
-//    public String toString() {
-//        StringBuilder headersBuilder = new StringBuilder();
-//        
-//        for(Header h : entities) {
-//            headersBuilder.append(h);
-//            headersBuilder.append("\r\n");
-//        }
-//        return headersBuilder.toString();
-//    }
+    @Override
+    public String toString() {
+        StringBuilder headersBuilder = new StringBuilder();
+        
+        for(Header h : entities) {
+            headersBuilder.append(h);
+            headersBuilder.append("\r\n");
+        }
+        return headersBuilder.toString();
+    }
     
 }
