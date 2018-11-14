@@ -5,6 +5,7 @@
         <group>
             <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/client/Test.java</file>
             <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/common/KeyAndValue.java</file>
+            <file>jar:file:/E:/JavaWorkspace/JNPHttpAdvanced/src/libraries/java-json.jar!/org/json/JSONObject.java</file>
             <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/modules/http/HttpSpecifications.java</file>
             <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/modules/http/ContentType.java</file>
             <file>file:/E:/JavaWorkspace/JNPHttpAdvanced/src/jnp/tmg/utils/HeadersHelper.java</file>

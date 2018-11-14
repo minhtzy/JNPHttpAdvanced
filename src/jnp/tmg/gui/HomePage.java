@@ -5,9 +5,10 @@
  */
 package jnp.tmg.gui;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.CookieManager;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -63,6 +64,7 @@ public class HomePage extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         HeaderTable = new javax.swing.JTable();
         AddRowHeaderButton = new javax.swing.JButton();
+        btnHeaderRemove = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         radioUrlencoded = new javax.swing.JRadioButton();
         radioRaw = new javax.swing.JRadioButton();
@@ -74,6 +76,7 @@ public class HomePage extends javax.swing.JFrame {
         jScrollPane6 = new javax.swing.JScrollPane();
         BodyTable = new javax.swing.JTable();
         AddRowBodyButton = new javax.swing.JButton();
+        btnBodyRequestRemove = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
@@ -92,6 +95,8 @@ public class HomePage extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         CookiesTable = new javax.swing.JTable();
+        btnAddCookieToHeader = new javax.swing.JButton();
+        btnCopyCookieToClipboard = new javax.swing.JButton();
 
         jMenu1.setText("jMenu1");
 
@@ -126,7 +131,7 @@ public class HomePage extends javax.swing.JFrame {
 
         HeaderTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                { new Boolean(true), null, null}
+                { new Boolean(true), "Content-Type", "x-www-form-urlencoded"}
             },
             new String [] {
                 "", "Key", "Value"
@@ -161,6 +166,13 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
 
+        btnHeaderRemove.setText("-");
+        btnHeaderRemove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnHeaderRemoveMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -169,15 +181,19 @@ public class HomePage extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 840, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(AddRowHeaderButton)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(AddRowHeaderButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnHeaderRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(AddRowHeaderButton)
-                .addContainerGap(226, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnHeaderRemove)
+                .addContainerGap(192, Short.MAX_VALUE))
             .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
@@ -185,14 +201,35 @@ public class HomePage extends javax.swing.JFrame {
 
         buttonGroup1.add(radioUrlencoded);
         radioUrlencoded.setText("x-www-form-urlencoded");
+        radioUrlencoded.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                radioUrlencodedStateChanged(evt);
+            }
+        });
+        radioUrlencoded.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                radioUrlencodedActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(radioRaw);
         radioRaw.setText("raw");
+        radioRaw.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                radioRawStateChanged(evt);
+            }
+        });
 
         cbRequestContentType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "application/json", "text/xml", "application/xml", "text/html", "application/javascript", "text/plain" }));
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, radioRaw, org.jdesktop.beansbinding.ELProperty.create("${selected}"), cbRequestContentType, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
+
+        cbRequestContentType.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbRequestContentTypeItemStateChanged(evt);
+            }
+        });
 
         txtBodyRequest.setColumns(20);
         txtBodyRequest.setRows(5);
@@ -206,7 +243,7 @@ public class HomePage extends javax.swing.JFrame {
             rawPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(rawPaneLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 895, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 905, Short.MAX_VALUE)
                 .addContainerGap())
         );
         rawPaneLayout.setVerticalGroup(
@@ -255,8 +292,16 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
 
+        btnBodyRequestRemove.setText("-");
+        btnBodyRequestRemove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBodyRequestRemoveMouseClicked(evt);
+            }
+        });
+
         urlencodedPane.setLayer(jScrollPane6, javax.swing.JLayeredPane.DEFAULT_LAYER);
         urlencodedPane.setLayer(AddRowBodyButton, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        urlencodedPane.setLayer(btnBodyRequestRemove, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout urlencodedPaneLayout = new javax.swing.GroupLayout(urlencodedPane);
         urlencodedPane.setLayout(urlencodedPaneLayout);
@@ -265,8 +310,10 @@ public class HomePage extends javax.swing.JFrame {
             .addGroup(urlencodedPaneLayout.createSequentialGroup()
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 834, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(AddRowBodyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 23, Short.MAX_VALUE))
+                .addGroup(urlencodedPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(AddRowBodyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBodyRequestRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(33, 33, 33))
         );
         urlencodedPaneLayout.setVerticalGroup(
             urlencodedPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -277,7 +324,9 @@ public class HomePage extends javax.swing.JFrame {
             .addGroup(urlencodedPaneLayout.createSequentialGroup()
                 .addGap(41, 41, 41)
                 .addComponent(AddRowBodyButton)
-                .addContainerGap(167, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnBodyRequestRemove)
+                .addContainerGap(133, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -335,7 +384,7 @@ public class HomePage extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addGap(98, 98, 98)
                 .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(728, Short.MAX_VALUE))
+                .addContainerGap(738, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -435,18 +484,55 @@ public class HomePage extends javax.swing.JFrame {
         CookiesTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(CookiesTable);
 
+        btnAddCookieToHeader.setText("Add to header");
+        btnAddCookieToHeader.setToolTipText("");
+        btnAddCookieToHeader.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAddCookieToHeaderMouseClicked(evt);
+            }
+        });
+        btnAddCookieToHeader.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddCookieToHeaderActionPerformed(evt);
+            }
+        });
+
+        btnCopyCookieToClipboard.setText("Copy to clipboard");
+        btnCopyCookieToClipboard.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCopyCookieToClipboardMouseClicked(evt);
+            }
+        });
+        btnCopyCookieToClipboard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCopyCookieToClipboardActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 926, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnAddCookieToHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
+                        .addComponent(btnCopyCookieToClipboard)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 926, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCopyCookieToClipboard)
+                    .addComponent(btnAddCookieToHeader))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -643,6 +729,99 @@ public class HomePage extends javax.swing.JFrame {
         resetRespones();
     }//GEN-LAST:event_SubmitButtonMousePressed
 
+    private void btnAddCookieToHeaderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCookieToHeaderActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAddCookieToHeaderActionPerformed
+
+    private void btnCopyCookieToClipboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyCookieToClipboardActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCopyCookieToClipboardActionPerformed
+
+    private void btnCopyCookieToClipboardMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCopyCookieToClipboardMouseClicked
+
+        // TODO add your handling code here:
+        int row = CookiesTable.getSelectedRow();
+        if (row < 0) {
+            return;
+        }
+        String key = CookiesTable.getValueAt(row, 0).toString();
+        String domain = CookiesTable.getValueAt(row, 2).toString();
+        Cookie c = requester.getCookies().getEntity(key);
+        if (c != null) {
+            StringSelection selection = new StringSelection(c.toString());
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
+
+            JOptionPane.showMessageDialog(null, "Saved to clipboard", "Succesful", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnCopyCookieToClipboardMouseClicked
+
+    private void btnAddCookieToHeaderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddCookieToHeaderMouseClicked
+        // TODO add your handling code here:
+        // TODO add your handling code here:
+        int rows[] = CookiesTable.getSelectedRows();
+        if (rows.length == 0) {
+            return;
+        }
+        for (int r : rows) {
+            String key = CookiesTable.getValueAt(r, 0).toString();
+            Cookie c = requester.getCookies().getEntity(key);
+            if (c != null) {
+                DefaultTableModel model = (DefaultTableModel) HeaderTable.getModel();
+                model.addRow(new Object[]{true, "Set-Cookie", c.toString()});
+            }
+        }
+
+    }//GEN-LAST:event_btnAddCookieToHeaderMouseClicked
+
+    private void radioUrlencodedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioUrlencodedActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_radioUrlencodedActionPerformed
+
+    private void btnHeaderRemoveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnHeaderRemoveMouseClicked
+        // TODO add your handling code here:
+        int row = HeaderTable.getSelectedRow();
+        if (row >= 0) {
+            DefaultTableModel dt = (DefaultTableModel) HeaderTable.getModel();
+            dt.removeRow(row);
+        }
+    }//GEN-LAST:event_btnHeaderRemoveMouseClicked
+
+    private void btnBodyRequestRemoveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBodyRequestRemoveMouseClicked
+        // TODO add your handling code here:
+        int row = BodyTable.getSelectedRow();
+        if (row >= 0) {
+            DefaultTableModel dt = (DefaultTableModel) BodyTable.getModel();
+            dt.removeRow(row);
+        }
+    }//GEN-LAST:event_btnBodyRequestRemoveMouseClicked
+
+    private void cbRequestContentTypeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbRequestContentTypeItemStateChanged
+        // TODO add your handling code here:
+        changeHeaderContentType();
+    }//GEN-LAST:event_cbRequestContentTypeItemStateChanged
+
+    private void radioUrlencodedStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_radioUrlencodedStateChanged
+        // TODO add your handling code here:
+        if (radioUrlencoded.isSelected()) {
+            urlencodedPane.setVisible(true);
+            rawPane.setVisible(false);
+            changeHeaderContentType();
+        }
+
+    }//GEN-LAST:event_radioUrlencodedStateChanged
+
+    private void radioRawStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_radioRawStateChanged
+        // TODO add your handling code here:
+
+        if (radioRaw.isSelected()) {
+            urlencodedPane.setVisible(false);
+            rawPane.setVisible(true);
+            changeHeaderContentType();
+        }
+
+    }//GEN-LAST:event_radioRawStateChanged
+
     /**
      * @param args the command line arguments
      */
@@ -687,6 +866,10 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JTabbedPane RequestPane;
     private javax.swing.JTabbedPane ResponsePane;
     private javax.swing.JButton SubmitButton;
+    private javax.swing.JButton btnAddCookieToHeader;
+    private javax.swing.JButton btnBodyRequestRemove;
+    private javax.swing.JButton btnCopyCookieToClipboard;
+    private javax.swing.JButton btnHeaderRemove;
     private javax.swing.JButton btnParams;
     private javax.swing.JButton btnPreviewHtml;
     private javax.swing.ButtonGroup buttonGroup1;
@@ -738,13 +921,6 @@ public class HomePage extends javax.swing.JFrame {
 
     protected Headers getRequestHeaders() {
         Headers requestHeaders = new Headers();
-        String contentTypeStr = "";
-        if (radioRaw.isSelected()) {
-            contentTypeStr = "application/x-www-form-urlencoded";
-        } else {
-            contentTypeStr = cbRequestContentType.getSelectedItem().toString().trim();
-        }
-        requestHeaders.addEntity(new Header("Content-Type", contentTypeStr));
         for (int i = 0; i < HeaderTable.getRowCount(); ++i) {
             boolean isAdd = Boolean.valueOf(HeaderTable.getValueAt(i, 0).toString());
             if (isAdd && HeaderTable.getValueAt(i, 1) != null && HeaderTable.getValueAt(i, 2) != null) {
@@ -820,12 +996,14 @@ public class HomePage extends javax.swing.JFrame {
 
     protected void loadResponseCookies() {
         System.out.println("Load Response Cookies...");
-
-        DefaultTableModel ctModel = (DefaultTableModel) CookiesTable.getModel();
-        ctModel.getDataVector().removeAllElements();
-
         List<Cookie> listCookie = requester.getCookies().getEntities();
         CookiesManager.getInstance().addCookies(listCookie);
+        loadResponseCookieTable(listCookie);
+    }
+
+    protected void loadResponseCookieTable(List<Cookie> listCookie) {
+        DefaultTableModel ctModel = (DefaultTableModel) CookiesTable.getModel();
+        ctModel.getDataVector().removeAllElements();
         for (Cookie c : listCookie) {
             Object[] col = new Object[7];
             col[0] = c.getKey();
@@ -839,7 +1017,6 @@ public class HomePage extends javax.swing.JFrame {
         }
         ctModel.fireTableDataChanged();
         System.out.println("Load Response Cookies Completed.");
-
     }
 
     protected void previewBrowser() {
@@ -851,28 +1028,28 @@ public class HomePage extends javax.swing.JFrame {
         });
     }
 
+    void changeHeaderContentType() {
+        String contentTypeStr = "";
+        if (radioUrlencoded.isSelected()) {
+            contentTypeStr = "application/x-www-form-urlencoded";
+        } else {
+            contentTypeStr = cbRequestContentType.getSelectedItem().toString().trim();
+        }
+        DefaultTableModel dt = (DefaultTableModel) HeaderTable.getModel();
+        boolean hasContentType = false;
+        for (int i = 0; i < HeaderTable.getRowCount(); ++i) {
+            if ("Content-Type".equalsIgnoreCase(dt.getValueAt(i, 1).toString())) {
+                dt.setValueAt(contentTypeStr, i, 2);
+                hasContentType = true;
+            }
+        }
+
+        if (!hasContentType) {
+            dt.addRow(new Object[]{true, "Content-Type", contentTypeStr});
+        }
+    }
+
     private void myInitHomePage() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        radioRaw.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (radioRaw.isSelected()) {
-                    urlencodedPane.setVisible(false);
-                    rawPane.setVisible(true);
-                }
-            }
-        });
-
-        radioUrlencoded.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                if (radioUrlencoded.isSelected()) {
-                    urlencodedPane.setVisible(true);
-                    rawPane.setVisible(false);
-                }
-            }
-        });
-
         radioUrlencoded.setSelected(true);
     }
 }

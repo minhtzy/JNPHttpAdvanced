@@ -1,8 +1,3 @@
-/**
- *
- * JsonUtils
- * Created by @minht on Oct 14, 2018
- */
 package jnp.tmg.utils;
 
 import java.io.UnsupportedEncodingException;
@@ -40,7 +35,7 @@ public class JsonUtils {
 
     public static String prettyJson(String rawData) {
         try {
-            String data = rawData.replaceAll("[\\\\r\\\\n]+", "");
+            String data = rawData.replaceAll("\\r", "").replaceAll("\\t", "").replaceAll("\\\"", "\"");
             JSONObject json = new JSONObject(data);
             return json.toString(PRERTTY_STRING_INDENT_FACTOR);
         } catch (Exception ex) {

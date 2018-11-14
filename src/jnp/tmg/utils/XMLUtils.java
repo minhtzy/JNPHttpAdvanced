@@ -1,14 +1,5 @@
-/**
- *
- * XMLUtils
- * Created by @minht on Oct 14, 2018
- */
 package jnp.tmg.utils;
 
-/**
- *
- * @author minht
- */
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;

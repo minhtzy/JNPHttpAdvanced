@@ -9,10 +9,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jnp.tmg.common.KeyAndValue;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -261,5 +264,47 @@ public class Cookie implements KeyAndValue {
         }
 
         return cookie;
+    }
+    public static Cookie parse(JSONObject obj) throws JSONException {
+        Cookie c = new Cookie();
+        Iterator it = obj.keys();
+        
+        while (it.hasNext()) {
+            String key = (String)it.next();
+            Object value = obj.get(key);
+            if("key".equalsIgnoreCase(key)) {
+                c.setKey((String)value);
+            }
+            else if("value".equalsIgnoreCase(key)) {
+                c.setValue((String)value);
+            }
+            else if(PATH.equalsIgnoreCase(key)) {
+                c.setPath((String)value);
+            }
+            else if(COMMENT.equalsIgnoreCase(key)) {
+                c.setComment((String)value);
+            }
+            else if(DOMAIN.equalsIgnoreCase(key)) {
+                c.setDomain((String)value);
+            }
+            else if(MAX_AGE.equalsIgnoreCase(key)) {
+                c.setMaxAge((Integer)value);
+            }
+            else if(HTTP_ONLY.equalsIgnoreCase(key)) {
+                c.setHttpOnly((Boolean)value);
+            }
+            else if(SECURE.equalsIgnoreCase(key)) {
+                c.setSecured((Boolean)value);
+            }
+            else if(VERSION.equalsIgnoreCase(key)) {
+                c.setVersion((Integer)value);
+            }
+            else if(EXPIRES.equalsIgnoreCase(key)) {
+                c.setExpiryDate((Date)value);
+            }
+          
+        }
+        return c;
+        
     }
 }
